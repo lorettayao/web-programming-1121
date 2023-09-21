@@ -21,13 +21,10 @@ function updateCurrentDateTime() {
     weekday: "long",
     year: "numeric",
     month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+    day: "numeric"
   };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  dateTimeElement.textContent = "Current Date and Time: " + formattedDate;
+  dateTimeElement.textContent = "Current Date: " + formattedDate;
 }
 
 
