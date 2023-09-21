@@ -55,6 +55,10 @@ function createTodoElement(todo) {
   checkbox.dataset.id = todo.id;
   const title = item.querySelector("p.todo-title");
   title.innerText = todo.title;
+  const catagory = item.querySelector("p.todo-catagory");
+  title.innerText = todo.catagory;
+  const mood = item.querySelector("p.todo-mood");
+  title.innerText = todo.mood;
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
   const deleteButton = item.querySelector("button.delete-todo");
@@ -83,14 +87,27 @@ async function getTodos() {
 }
 
 async function createTodo(todo) {
-  const response = await fetch(`${apiRoot}/todos`, {
+  const response1 = await fetch(`${apiRoot}/todos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(todo),
   });
-  const data = await response.json();
+  const data1 = await response1.json();
+  const currentDate = new Date();
+  todo.Date = currentDate.toISOString();
+  const response2 = await fetch(
+    `${apiRoot}/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(todo),
+    }
+  );
+  const data2 = await response2.json();
+  
   return data;
 }
 

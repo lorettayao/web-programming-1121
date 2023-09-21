@@ -10,9 +10,14 @@
     <div id="todo-input-container">
       <input type="My Diary" id="todo-input" placeholder="new todo" tabindex="1" />
       <select>
-        <option>murmur</option>
-        <option>mood</option>
-        <option>moan</option>
+        <option>學業</option>
+        <option>人際</option>
+        <option>社團</option>
+      </select>
+      <select>
+        <option>快樂</option>
+        <option>生氣</option>
+        <option>難過</option>
       </select>
       <button id="todo-add" tabindex="3">add</button>
     </div>
@@ -21,6 +26,9 @@
       placeholder="description"
       tabindex="2"
     ></textarea>
+    <!-- put time inside -->
+    
+
     <section id="todos"></section>
   </body>
   <template id="todo-item-template">
@@ -29,6 +37,8 @@
         <div>
           <input data-id="" type="checkbox" />
           <p class="todo-title">todo 1</p>
+          <p class="todo-catagory">學業</p>
+          <p class="todo-mood">生氣</p>
         </div>
         <button data-id="" class="delete-todo">delete</button>
       </summary>
