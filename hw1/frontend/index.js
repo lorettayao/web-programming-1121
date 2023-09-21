@@ -3,6 +3,8 @@ const todoList = document.querySelector("#todos");
 const apiRoot = "http://localhost:8000/api";
 
 async function main() {
+  updateCurrentDateTime();
+  setInterval(updateCurrentDateTime, 1000);
   setupEventListeners();
   try {
     const todos = await getTodos();
@@ -11,6 +13,23 @@ async function main() {
     alert("Failed to load todos!");
   }
 }
+// add func for showing date
+function updateCurrentDateTime() {
+  const dateTimeElement = document.getElementById("current-date-time");
+  const currentDate = new Date();
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
+  dateTimeElement.textContent = "Current Date and Time: " + formattedDate;
+}
+
 
 function setupEventListeners() {
   const addTodoButton = document.querySelector("#todo-add");
@@ -55,10 +74,11 @@ function createTodoElement(todo) {
   checkbox.dataset.id = todo.id;
   const title = item.querySelector("p.todo-title");
   title.innerText = todo.title;
-  const catagory = item.querySelector("p.todo-catagory");
-  title.innerText = todo.catagory;
+  // add catagory and mood
+  const category = item.querySelector("p.todo-category");
+  category.innerText = todo.category;
   const mood = item.querySelector("p.todo-mood");
-  title.innerText = todo.mood;
+  mood.innerText = todo.mood;
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
   const deleteButton = item.querySelector("button.delete-todo");
@@ -87,26 +107,14 @@ async function getTodos() {
 }
 
 async function createTodo(todo) {
-  const response1 = await fetch(`${apiRoot}/todos`, {
+  const response = await fetch(`${apiRoot}/todos`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(todo),
   });
-  const data1 = await response1.json();
-  const currentDate = new Date();
-  todo.Date = currentDate.toISOString();
-  const response2 = await fetch(
-    `${apiRoot}/todos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    }
-  );
-  const data2 = await response2.json();
+  const data = await response.json();
   
   return data;
 }
