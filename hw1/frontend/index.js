@@ -10,7 +10,7 @@ async function main() {
     const todos = await getTodos();
     todos.forEach((todo) => renderTodo(todo));
   } catch (error) {
-    alert("Failed to load todos!");
+    alert("Failed to load todos! here");
   }
 }
 // add func for showing date
@@ -72,10 +72,10 @@ function createTodoElement(todo) {
   const title = item.querySelector("p.todo-title");
   title.innerText = todo.title;
   // add catagory and mood
-  const category = item.querySelector("p.todo-category");
-  category.innerText = todo.category;
-  const mood = item.querySelector("p.todo-mood");
-  mood.innerText = todo.mood;
+  // const category = item.querySelector("p.todo-category");
+  // category.innerText = todo.category;
+  // const mood = item.querySelector("p.todo-mood");
+  // mood.innerText = todo.mood;
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
   const deleteButton = item.querySelector("button.delete-todo");
