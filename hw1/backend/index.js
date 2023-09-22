@@ -27,7 +27,7 @@ app.get("/api/todos/:id", (req, res) => {
 });
 
 app.post("/api/todos", (req, res) => {
-  const { title, description } = req.body;
+  const { title, description,category, mood } = req.body;
 
   // check title and description
   if (!title || !description) {
@@ -40,6 +40,8 @@ app.post("/api/todos", (req, res) => {
     id: uuid(),
     title,
     description,
+    category,
+    mood,
     completed: false,
   };
   db.todos.push(todo);
@@ -48,7 +50,7 @@ app.post("/api/todos", (req, res) => {
 
 app.put("/api/todos/:id", (req, res) => {
   const { id } = req.params;
-  const { title, description, completed } = req.body;
+  const { title, description, completed ,category} = req.body;
 
   const todo = db.todos.find((todo) => todo.id === id);
   if (!todo) {
@@ -58,6 +60,8 @@ app.put("/api/todos/:id", (req, res) => {
   // update the todo
   if (title !== undefined) todo.title = title;
   if (description !== undefined) todo.description = description;
+  if (category !== undefined) todo.category = category;
+
   if (completed !== undefined) todo.completed = completed;
 
   return res.status(200).json(todo);

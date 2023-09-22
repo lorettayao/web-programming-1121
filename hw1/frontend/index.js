@@ -18,7 +18,6 @@ function updateCurrentDateTime() {
   const dateTimeElement = document.getElementById("current-date-time");
   const currentDate = new Date();
   const options = {
-    weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric"
@@ -34,9 +33,14 @@ function setupEventListeners() {
   const todoDescriptionInput = document.querySelector(
     "#todo-description-input",
   );
+  const categorySelect=document.querySelector("#todo-category");
+  const moodSelect=document.querySelector("#todo-mood");
+
   addTodoButton.addEventListener("click", async () => {
     const title = todoInput.value;
     const description = todoDescriptionInput.value;
+    const category=categorySelect.value;
+    const mood=moodSelect.value;
     if (!title) {
       alert("Please enter a todo title!");
       return;
@@ -46,7 +50,7 @@ function setupEventListeners() {
       return;
     }
     try {
-      const todo = await createTodo({ title, description });
+      const todo = await createTodo({ title, description,category,mood });
       renderTodo(todo);
     } catch (error) {
       alert("Failed to create todo!");
@@ -72,14 +76,20 @@ function createTodoElement(todo) {
   const title = item.querySelector("p.todo-title");
   title.innerText = todo.title;
   // add catagory and mood
-  // const category = item.querySelector("p.todo-category");
-  // category.innerText = todo.category;
-  // const mood = item.querySelector("p.todo-mood");
-  // mood.innerText = todo.mood;
+
+  const category = item.querySelector("p.todo-category");
+  category.value = todo.category;
+
+  const mood = item.querySelector("p.todo-mood");
+  mood.value = todo.mood;
+
+  // must create p. for above, or the todo cannot load
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
+  const editButton = item.querySelector("button.delete-todo");
+  editButton.dataset.id = todo.id;
   deleteButton.addEventListener("click", () => {
     deleteTodoElement(todo.id);
   });
@@ -136,5 +146,16 @@ async function deleteTodoById(id) {
   const data = await response.json();
   return data;
 }
+// const editButton = item.querySelector(".edit-todo");
+//   editButton.dataset.id = todo.id;
+//   editButton.addEventListener("click", () => {
+//     // Handle the edit button click event here
+//     editTodo(todo.id, item);
+//   });
+
+// function editTodo(id,item){
+  
+// }
+  
 
 main();
