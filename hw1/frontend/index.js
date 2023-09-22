@@ -3,6 +3,7 @@ const todoList = document.querySelector("#todos");
 const apiRoot = "http://localhost:8000/api";
 
 async function main() {
+  
   updateCurrentDateTime();
   setInterval(updateCurrentDateTime, 1000);
   setupEventListeners();
@@ -78,10 +79,11 @@ function createTodoElement(todo) {
   // add catagory and mood
 
   const category = item.querySelector("p.todo-category");
-  category.value = todo.category;
-
+  category.textContent = todo.category;
+  
   const mood = item.querySelector("p.todo-mood");
-  mood.value = todo.mood;
+  mood.textContent = todo.mood;
+  //幹改成textcontent from value it works!
 
   // must create p. for above, or the todo cannot load
   const description = item.querySelector("p.todo-description");

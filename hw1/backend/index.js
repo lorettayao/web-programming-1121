@@ -50,7 +50,7 @@ app.post("/api/todos", (req, res) => {
 
 app.put("/api/todos/:id", (req, res) => {
   const { id } = req.params;
-  const { title, description, completed ,category} = req.body;
+  const { title, description, completed ,category, mood} = req.body;
 
   const todo = db.todos.find((todo) => todo.id === id);
   if (!todo) {
@@ -60,8 +60,8 @@ app.put("/api/todos/:id", (req, res) => {
   // update the todo
   if (title !== undefined) todo.title = title;
   if (description !== undefined) todo.description = description;
-  if (category !== undefined) todo.category = category;
-
+  todo.category = category;
+  todo.mood = mood;
   if (completed !== undefined) todo.completed = completed;
 
   return res.status(200).json(todo);
