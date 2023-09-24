@@ -7,9 +7,11 @@ async function main() {
   updateCurrentDateTime();
   setInterval(updateCurrentDateTime, 1000);
   setupEventListeners();
+  console.log("hi");
   try {
     const todos = await getTodos();
     todos.forEach((todo) => renderTodo(todo));
+    // console.log(todo);
   } catch (error) {
     alert("Failed to load todos! here");
   }
@@ -36,12 +38,14 @@ function setupEventListeners() {
   );
   const categorySelect=document.querySelector("#todo-category");
   const moodSelect=document.querySelector("#todo-mood");
-
+  const dateuse = document.querySelector("#todo-date");
+  
   addTodoButton.addEventListener("click", async () => {
     const title = todoInput.value;
     const description = todoDescriptionInput.value;
     const category=categorySelect.value;
     const mood=moodSelect.value;
+    const dateuse=updateCurrentDateTime();
     if (!title) {
       alert("Please enter a todo title!");
       return;
@@ -51,7 +55,7 @@ function setupEventListeners() {
       return;
     }
     try {
-      const todo = await createTodo({ title, description,category,mood });
+      const todo = await createTodo({ title, description,category,mood,dateuse });
       renderTodo(todo);
     } catch (error) {
       alert("Failed to create todo!");
@@ -83,18 +87,25 @@ function createTodoElement(todo) {
   
   const mood = item.querySelector("p.todo-mood");
   mood.textContent = todo.mood;
-  //幹改成textcontent from value it works!
-
+  //改成textcontent from value it works!
   // must create p. for above, or the todo cannot load
+  const dateuse = item.querySelector("p.todo-date");
+  dateuse.value= updateCurrentDateTime();
+  
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
-  const editButton = item.querySelector("button.delete-todo");
+  const editButton = item.querySelector("button.edit-todo");
   editButton.dataset.id = todo.id;
   deleteButton.addEventListener("click", () => {
     deleteTodoElement(todo.id);
   });
+  editButton.addEventListener("click",(event) =>{
+    handleEditButtonClick(event);
+  }
+  
+  );
   return item;
 }
 
@@ -108,6 +119,52 @@ async function deleteTodoElement(id) {
     todo.remove();
   }
 }
+
+
+
+// Function to handle the edit button click event
+function handleEditButtonClick(event) {
+  const todoItem = event.target.closest(".todo-item");
+  if (!todoItem) { 
+    console.log("not inside handle function");
+  return;} 
+
+  const todoTitleElement = todoItem.querySelector(".todo-title");
+  const editTitleInput = todoItem.querySelector(".edit-title-input");
+  const todoDescriptionElement=todoItem.querySelector(".todo-description");
+  const editDescriptionInput=todoItem.querySelector(".edit-description-input");
+  const editButton = todoItem.querySelector(".edit-todo");
+
+  if (editTitleInput.style.display === "none") {
+    
+    todoTitleElement.style.display = "none";
+    editTitleInput.style.display = "inline"; 
+    editTitleInput.value = todoTitleElement.textContent; 
+    
+    todoDescriptionElement.style.display = "none";
+    editDescriptionInput.style.display = "inline"; 
+    editDescriptionInput.value = todoDescriptionElement.textContent; 
+    editButton.textContent = "Save"; 
+  } else {
+    const editedTitle = editTitleInput.value;
+    todoTitleElement.textContent = editedTitle;
+    editTitleInput.style.display = "none";
+    todoTitleElement.style.display = "inline"; 
+    const editedDescription = editDescriptionInput.value;
+    todoDescriptionElement.textContent = editedDescription;
+    editDescriptionInput.style.display = "none";
+    todoDescriptionElement.style.display = "inline"; 
+
+    editButton.textContent = "Edit"; 
+    
+  }
+}
+
+const editButtons = document.querySelectorAll(".edit-todo");
+editButtons.forEach((button) => {
+  button.addEventListener("click", handleEditButtonClick);
+});
+
 
 async function getTodos() {
   const response = await fetch(`${apiRoot}/todos`);
@@ -148,16 +205,6 @@ async function deleteTodoById(id) {
   const data = await response.json();
   return data;
 }
-// const editButton = item.querySelector(".edit-todo");
-//   editButton.dataset.id = todo.id;
-//   editButton.addEventListener("click", () => {
-//     // Handle the edit button click event here
-//     editTodo(todo.id, item);
-//   });
 
-// function editTodo(id,item){
-  
-// }
-  
 
 main();
