@@ -1,58 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>todo list</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="index.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"
+      integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
   <body>
-    <!-- <script src="func.js"></script> -->
     <h1>My diary</h1>
     <div id="todo-input-container">
-      <input type="My Diary" id="todo-input" placeholder="new todo" tabindex="1" />
-      <div id="current-date-time"></div>
-      <select id="todo-category">
-        <option value="school">School</option>
-        <option value="relationship"> Relationship</option>
-        <option value="club">Club</option>
-      </select>
-      <select id="todo-mood">
-        <option value="happy">Happy</option>
-        <option value="angry">Angry</option>
-        <option value="sad">Sad</option>
-      </select>
-      <button id="todo-add" tabindex="3" >add</button>
+      <input type="text" id="todo-input" placeholder="new todo" tabindex="1" />
+      <button id="todo-add" tabindex="3">add</button>
     </div>
     <textarea
       id="todo-description-input"
       placeholder="description"
       tabindex="2"
     ></textarea>
-  
+    <select id="option1-input">
+      <option>school</option>
+      <option>relationship</option>
+      <option>club</option>
+    </select>
+    <select id="option2-input">
+      <option>happy</option>
+      <option>sad</option>
+      <option>angry</option>
+    </select>
     <section id="todos"></section>
   </body>
-  
   <template id="todo-item-template">
-    <details id="1234" class="todo-item">
+    <details id="" class="todo-item">
       <summary>
         <div>
           <input data-id="" type="checkbox" />
           <p class="todo-title">todo 1</p>
-          <input class="edit-title-input" type="text" placeholder="Edit title" style="display: none;">
-          <input class="edit-description-input" type="text" placeholder="Edit description" style="display: none;">
-          <p class="todo-category"></p>
-          <p class="todo-mood"></p>
-          <p class="todo-date"></p>
+          <p class="showdate"></p>
+          <p class="todo-option1"></p>
+          <p class="todo-option2"></p>
         </div>
         <button data-id="" class="delete-todo">delete</button>
         <button data-id="" class="edit-todo">edit</button>
         
-
       </summary>
       <p class="todo-description">todo 1 description</p>
-      <!-- this two lines below is hard code, dont open -->
-      <!-- <p class="todo-category">Category: school</p>
-      <p class="todo-mood">Mood: happy</p> -->
     </details>
   </template>
 </html>
