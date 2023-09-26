@@ -172,4 +172,33 @@ async function deleteTodoById(id) {
   return response.data;
 }
 
+// Function to handle adding a new option to the first select list
+function addOptionToSelect1() {
+  const option1Input = document.getElementById("option1-input");
+  const newOption = prompt("Enter a new option for List 1:");
+
+  if (newOption) {
+    const option = document.createElement("option");
+    option.text = newOption;
+    option1Input.appendChild(option);
+  }
+}
+
+// Function to handle adding a new option to the second select list
+function addOptionToSelect2() {
+  const option2Input = document.getElementById("option2-input");
+  const newOption = prompt("Enter a new option for List 2:");
+
+  if (newOption) {
+    const option = document.createElement("option");
+    option.text = newOption;
+    option2Input.appendChild(option);
+  }
+}
+
+// Event listeners for the "Add" buttons
+document.getElementById("add-option1-button").addEventListener("click", addOptionToSelect1);
+document.getElementById("add-option2-button").addEventListener("click", addOptionToSelect2);
+
+
 main();
