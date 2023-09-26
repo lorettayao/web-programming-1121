@@ -15,6 +15,12 @@ const todoSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    option1: {
+      type: String, // Change the data type as needed (e.g., String, Number, etc.)
+    },
+    option2: {
+      type: String, // Change the data type as needed (e.g., String, Number, etc.)
+    },
   },
   // The second argument is an options object.
   // In this case, we want to rename _id to id and remove __v
