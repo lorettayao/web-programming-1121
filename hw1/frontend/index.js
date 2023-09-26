@@ -16,6 +16,8 @@ async function main() {
   }
 }
 
+
+
 function setupEventListeners() {
   const addTodoButton = document.querySelector("#todo-add");
   const todoInput = document.querySelector("#todo-input");
@@ -25,6 +27,8 @@ function setupEventListeners() {
   const option1 =document.querySelector("#option1-input");
   const option2 =document.querySelector("#option2-input");
   // const showdate=document.querySelector("p.showdate")
+  const editButton = document.getElementById("#edit-button");
+
   addTodoButton.addEventListener("click", async () => {
     const title = todoInput.value;
     const description = todoDescriptionInput.value;
@@ -50,11 +54,11 @@ function setupEventListeners() {
     todoInput.value = "";
     todoDescriptionInput.value = "";
   });
+  
 }
 
 function renderTodo(todo) {
   const item = createTodoElement(todo);
-  console.log("render",todo);
   todoList.appendChild(item);
 }
 
@@ -62,7 +66,6 @@ function createTodoElement(todo) {
   const item = itemTemplate.content.cloneNode(true);
   const container = item.querySelector(".todo-item");
   container.id = todo.id;
-  console.log(todo);
   const checkbox = item.querySelector(`input[type="checkbox"]`);
   checkbox.checked = todo.completed;
   checkbox.dataset.id = todo.id;
@@ -70,14 +73,11 @@ function createTodoElement(todo) {
   title.innerText = todo.title;
   const description = item.querySelector("p.todo-description");
   description.innerText = todo.description;
-  console.log(todo);
   const option1 = item.querySelector("p.todo-option1");
   option1.innerText= todo.write_op1;
-  console.log(todo);
   const option2 = item.querySelector("p.todo-option2");
   option2.innerText = todo.write_op2;
-  console.log(todo);
-  console.log(todo.write_op1);
+  
 
 
 
@@ -91,10 +91,19 @@ showDateElement.textContent = currentDate;
 
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
+  const editButton = item.querySelector("button.edit-todo");
+  editButton.dataset.id=todo.id;
+
   deleteButton.addEventListener("click", () => {
     deleteTodoElement(todo.id);
   });
+  editButton.addEventListener("click", () => {
+    // Redirect to edit.html when the button is clicked
+      
+    window.location.href = `edit.html?id=${todo.id}`;
+  });
   return item;
+
 }
 
 async function deleteTodoElement(id) {
@@ -115,6 +124,8 @@ async function getTodos() {
 
 async function createTodo(todo) {
   const response = await instance.post("/todos", todo);
+  const reply = response.data;
+  console.log("the reply is ",reply);
   return response.data;
 }
 

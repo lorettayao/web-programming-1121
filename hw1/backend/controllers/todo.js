@@ -19,7 +19,7 @@ export const getTodos = async (req, res) => {
 };
 // Create a todo
 export const createTodo = async (req, res) => {
-  const { title, description} = req.body;
+  const { title, description, write_op1, write_op2} = req.body;
 
   // Check title and description
   if (!title || !description) {
@@ -34,8 +34,8 @@ export const createTodo = async (req, res) => {
       title,
       description,
       completed: false,
-      // option1,
-      // option2,
+      write_op1,
+      write_op2,
     });
     return res.status(201).json(newTodo);
   } catch (error) {
