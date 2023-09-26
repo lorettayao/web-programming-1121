@@ -19,23 +19,24 @@ async function main() {
 }
 
 
-
 function setupEventListeners() {
   const addTodoButton = document.querySelector("#todo-add");
   const todoInput = document.querySelector("#todo-input");
   const todoDescriptionInput = document.querySelector(
     "#todo-description-input"
   );
-  const option1 =document.querySelector("#option1-input");
-  const option2 =document.querySelector("#option2-input");
+  const todoOption1 =document.querySelector("#option1-input");
+
+  const todoOption2 =document.querySelector("#option2-input");
   // const showdate=document.querySelector("p.showdate")
   const editButton = document.getElementById("#edit-button");
 
   addTodoButton.addEventListener("click", async () => {
     const title = todoInput.value;
     const description = todoDescriptionInput.value;
-    const write_op1 = option1.value;
-    const write_op2 = option2.value;
+    const option1 = todoOption1.value;
+    const option2 = todoOption2.value;
+    
     // console.log("write_2 vlaue:",write_op2);
     if (!title) {
       alert("Please enter a todo title!");
@@ -46,8 +47,8 @@ function setupEventListeners() {
       return;
     }
     try {
-      const todo = await createTodo({ title, description, write_op1, write_op2 });
-      console.log(write_op1);
+      const todo = await createTodo({ title, description, option1, option2 });
+      // console.log(write_op1);
       console.log(todo);
       renderTodo(todo);
     } catch (error) {
@@ -82,30 +83,17 @@ function editTodo(event) {
 
 
 function createTodoElement(todo) {
-  // const item = itemTemplate.content.cloneNode(true);
-  // const container = item.querySelector(".todo-item");
-  // container.id = todo.id;
-  // const checkbox = item.querySelector(`input[type="checkbox"]`);
-  // checkbox.checked = todo.completed;
-  // checkbox.dataset.id = todo.id;
-  // const title = item.querySelector("p.todo-title");
-  // title.innerText = todo.title;
-  // const description = item.querySelector("p.todo-description");
-  // description.innerText = todo.description;
-  // const option1 = item.querySelector("p.todo-option1");
-  // option1.innerText= todo.write_op1;
-  // const option2 = item.querySelector("p.todo-option2");
-  // option2.innerText = todo.write_op2;
+
   const item = itemTemplate.content.cloneNode(true);
   const container = item.querySelector(".todo-item");
   container.id = todo.id;
   container.dataset.title = todo.title; // Store title data
   container.dataset.description = todo.description; // Store description data
-  container.dataset.option1 = todo.write_op1; // Store option1 data
-  container.dataset.option2 = todo.write_op2; // Store option2 data
+  container.dataset.option1 = todo.option1; // Store option1 data
+  container.dataset.option2 = todo.option2; // Store option2 data
   const currentDate = new Date().toLocaleDateString();
   container.dataset.date = currentDate; // Store date data
-  console.log("show the title",container.dataset.date);
+  // console.log("show the title",container.dataset.date);
 
   const title = item.querySelector("p.todo-title");
   title.innerText = container.dataset.title;
@@ -114,15 +102,16 @@ function createTodoElement(todo) {
   description.innerText = container.dataset.description;
 
   const option1 = item.querySelector("p.todo-option1");
-  option1.innerText = container.dataset.option1;
+  option1.textContent = container.dataset.option1;
 
   const option2 = item.querySelector("p.todo-option2");
-  option2.innerText = container.dataset.option2;
+  option2.textContent = container.dataset.option2;
 
   const showDateElement = item.querySelector(".showdate");
   showDateElement.textContent = container.dataset.date;
 
-
+  console.log("show title:",title);
+  console.log("ahow option1",option1);
 
 // Select the .showdate element within the cloned item
 // const showDateElement = item.querySelector(".showdate");

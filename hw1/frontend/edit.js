@@ -1,3 +1,5 @@
+
+
 const instance = axios.create({
     baseURL: "http://localhost:8000/api",
   });
@@ -13,22 +15,37 @@ document.addEventListener("DOMContentLoaded", async function () {
         const editTitle = document.getElementById("edit-title");
         const editDescription = document.getElementById("edit-description");
         const editDate = document.getElementById("edit-date");
+        const editOption1 = document.getElementById("edit-option1");
+        const editOption2 = document.getElementById("edit-option2");
 
         editTitle.value = todoData.title;
         editDescription.value= todoData.description;
         editDate.value = todoData.date;
+        editOption1.value=todoData.option1;
+        editOption2.value=todoData.option2;
+
 
         // Add click event listener to "Save" button
         const saveButton = document.getElementById("save-button");
         saveButton.addEventListener("click", async () => {
             // Get the edited values
-            console.log("inside the save button");
-            const editedTitle = editTitle.textContent;
-            const editedDescription = editDescription.textContent;
+            const editedTitle = editTitle.value;
+            const editedDescription = editDescription.value;
+            const editedDate = editDate.value;
+            const editedOption1=editOption1.value;
+            const editedOption2=editOption2.value;
 
-            console.log("the edited des:",editedDescription);
-            // Update the todo data (send it to the server for update)
-            await updateTodo(todoId, { title: editedTitle, description: editedDescription });
+            console.log("after edit?",editedTitle);
+            console.log("date?",editedDate);
+            // Update the todo data
+            await updateTodo(todoId,{
+                title: editedTitle,
+                description: editedDescription,
+                date: editedDate, // Include the edited date
+                option1: editedOption1,
+                option2: editedOption2,
+            }
+            );
 
             // Redirect back to index.html
             window.location.href = "index.html";
@@ -63,14 +80,15 @@ async function getTodo(todoId) {
 // Function to update todo data
 async function updateTodo(todoId, updatedData) {
     try {
-        // Replace with your API endpoint for updating a todo by its ID
-        const response = await axios.put(`/todos/${todoId}`, updatedData);
-        return response.data;
+      // Replace with your API endpoint for updating a todo by its ID
+      const response = await instance.put(`/todos/${todoId}`, updatedData);
+      return response.data;
     } catch (error) {
-        console.error("Error updating todo:", error);
-        throw error;
+      console.error("Error updating todo:", error.response.data);
+      throw error;
     }
-}
+  }
+
 
 function getTodoIdFromQueryParam() {
     const urlParams = new URLSearchParams(window.location.search);
