@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
         // Fetch todo data for editing
         const todoData = await getTodo(todoId);
-        console.log("tododata.title:",todoData.title);
+        console.log("tododata.date:",todoData.date);
         //undefined
         // Populate the edit fields with todo data
         const editTitle = document.getElementById("edit-title");
@@ -15,16 +15,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         const editDate = document.getElementById("edit-date");
 
         editTitle.value = todoData.title;
-        editDescription.value = todoData.description;
+        editDescription.value= todoData.description;
         editDate.value = todoData.date;
 
         // Add click event listener to "Save" button
         const saveButton = document.getElementById("save-button");
         saveButton.addEventListener("click", async () => {
             // Get the edited values
-            const editedTitle = editTitle.value;
-            const editedDescription = editDescription.value;
+            console.log("inside the save button");
+            const editedTitle = editTitle.textContent;
+            const editedDescription = editDescription.textContent;
 
+            console.log("the edited des:",editedDescription);
             // Update the todo data (send it to the server for update)
             await updateTodo(todoId, { title: editedTitle, description: editedDescription });
 
@@ -44,11 +46,18 @@ async function getTodo(todoId) {
         // Replace with your API endpoint for fetching a single todo by its ID
         // 參考後段的API implement 方法
         const response = await instance.get(`/todos`);
-        return response.data;
+        const todos = response.data;
+        const todo = todos.find((t) => t.id === todoId);
+        if (todo) {
+            return todo;
+        } else {
+            throw new Error(`Todo with ID ${todoId} not found.`);
+        }
     } catch (error) {
         console.error("Error fetching todo:", error);
         throw error;
     }
+    
 }
 
 // Function to update todo data

@@ -21,5 +21,7 @@ router.put("/:id", updateTodo);
 // DELETE /api/todos/:id
 router.delete("/:id", deleteTodo);
 
+// router.get("/:id", getTodoById);
+
 // export the router
 export default router;
