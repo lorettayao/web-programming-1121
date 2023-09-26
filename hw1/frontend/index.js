@@ -7,10 +7,12 @@ const instance = axios.create({
 });
 
 async function main() {
+  
   setupEventListeners();
   try {
     const todos = await getTodos();
     todos.forEach((todo) => renderTodo(todo));
+    console.log("hi");
   } catch (error) {
     alert("Failed to load todos!");
   }
@@ -46,6 +48,7 @@ function setupEventListeners() {
     try {
       const todo = await createTodo({ title, description, write_op1, write_op2 });
       console.log(write_op1);
+      console.log(todo);
       renderTodo(todo);
     } catch (error) {
       alert("Failed to create todo!");
@@ -59,40 +62,80 @@ function setupEventListeners() {
 
 function renderTodo(todo) {
   const item = createTodoElement(todo);
+  console.log("create_success");
   todoList.appendChild(item);
 }
 
+function editTodo(event) {
+  const todoItem = event.target.closest(".todo-item");
+  const todoId = todoItem.id;
+  const title = encodeURIComponent(todoItem.dataset.title);
+  const description = encodeURIComponent(todoItem.dataset.description);
+  const option1 = encodeURIComponent(todoItem.dataset.option1);
+  const option2 = encodeURIComponent(todoItem.dataset.option2);
+  const date = encodeURIComponent(todoItem.dataset.date);
+
+  const editUrl = `edit.html?id=${todoId}&title=${title}&description=${description}&option1=${option1}&option2=${option2}&date=${date}`;
+
+  window.location.href = editUrl;
+}
+
+
 function createTodoElement(todo) {
+  // const item = itemTemplate.content.cloneNode(true);
+  // const container = item.querySelector(".todo-item");
+  // container.id = todo.id;
+  // const checkbox = item.querySelector(`input[type="checkbox"]`);
+  // checkbox.checked = todo.completed;
+  // checkbox.dataset.id = todo.id;
+  // const title = item.querySelector("p.todo-title");
+  // title.innerText = todo.title;
+  // const description = item.querySelector("p.todo-description");
+  // description.innerText = todo.description;
+  // const option1 = item.querySelector("p.todo-option1");
+  // option1.innerText= todo.write_op1;
+  // const option2 = item.querySelector("p.todo-option2");
+  // option2.innerText = todo.write_op2;
   const item = itemTemplate.content.cloneNode(true);
   const container = item.querySelector(".todo-item");
   container.id = todo.id;
-  const checkbox = item.querySelector(`input[type="checkbox"]`);
-  checkbox.checked = todo.completed;
-  checkbox.dataset.id = todo.id;
+  container.dataset.title = todo.title; // Store title data
+  container.dataset.description = todo.description; // Store description data
+  container.dataset.option1 = todo.write_op1; // Store option1 data
+  container.dataset.option2 = todo.write_op2; // Store option2 data
+  const currentDate = new Date().toLocaleDateString();
+  container.dataset.date = currentDate; // Store date data
+  console.log("show the title",container.dataset.date);
+
   const title = item.querySelector("p.todo-title");
-  title.innerText = todo.title;
+  title.innerText = container.dataset.title;
+
   const description = item.querySelector("p.todo-description");
-  description.innerText = todo.description;
+  description.innerText = container.dataset.description;
+
   const option1 = item.querySelector("p.todo-option1");
-  option1.innerText= todo.write_op1;
+  option1.innerText = container.dataset.option1;
+
   const option2 = item.querySelector("p.todo-option2");
-  option2.innerText = todo.write_op2;
-  
+  option2.innerText = container.dataset.option2;
+
+  const showDateElement = item.querySelector(".showdate");
+  showDateElement.textContent = container.dataset.date;
 
 
-
-const currentDate = new Date().toLocaleDateString();
 
 // Select the .showdate element within the cloned item
-const showDateElement = item.querySelector(".showdate");
+// const showDateElement = item.querySelector(".showdate");
 
 // Set the text content of the .showdate element to the formatted date
-showDateElement.textContent = currentDate;
+// showDateElement.textContent = currentDate;
 
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
+  //fix problem : edit-todo is no longer a button
   const editButton = item.querySelector("button.edit-todo");
   editButton.dataset.id=todo.id;
+  
 
   deleteButton.addEventListener("click", () => {
     deleteTodoElement(todo.id);

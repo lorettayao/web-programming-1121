@@ -1,11 +1,14 @@
+const instance = axios.create({
+    baseURL: "http://localhost:8000/api",
+  });
 document.addEventListener("DOMContentLoaded", async function () {
     // Get todo data for editing from some source (e.g., URL query parameter or local storage)
     const todoId = getTodoIdFromQueryParam(); // Implement this function to extract the todo ID
-
     try {
         // Fetch todo data for editing
         const todoData = await getTodo(todoId);
-
+        console.log("tododata.title:",todoData.title);
+        //undefined
         // Populate the edit fields with todo data
         const editTitle = document.getElementById("edit-title");
         const editDescription = document.getElementById("edit-description");
@@ -34,18 +37,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 
-// Implement the getTodoIdFromQueryParam and any other necessary functions here
-function getTodoIdFromQueryParam() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const todoId = urlParams.get("id");
-    return todoId;
-}
 
 // Function to fetch todo data for editing
 async function getTodo(todoId) {
     try {
         // Replace with your API endpoint for fetching a single todo by its ID
-        const response = await axios.get(`http://localhost:8000/api/todos/${todoId}`);
+        // 參考後段的API implement 方法
+        const response = await instance.get(`/todos`);
         return response.data;
     } catch (error) {
         console.error("Error fetching todo:", error);
@@ -57,7 +55,7 @@ async function getTodo(todoId) {
 async function updateTodo(todoId, updatedData) {
     try {
         // Replace with your API endpoint for updating a todo by its ID
-        const response = await axios.put(`http://localhost:8000/api/todos/${todoId}`, updatedData);
+        const response = await axios.put(`/todos/${todoId}`, updatedData);
         return response.data;
     } catch (error) {
         console.error("Error updating todo:", error);
@@ -68,5 +66,6 @@ async function updateTodo(todoId, updatedData) {
 function getTodoIdFromQueryParam() {
     const urlParams = new URLSearchParams(window.location.search);
     const todoId = urlParams.get("id");
+    console.log("the todoID",todoId);
     return todoId;
 }
