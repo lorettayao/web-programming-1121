@@ -20,7 +20,7 @@ async function main() {
 
 function setupEventListeners() {
   const addTodoButton = document.querySelector("#todo-add");
-  const todoInput = document.querySelector("#todo-input");
+  // const todoInput = document.querySelector("#todo-input");
   const todoDescriptionInput = document.querySelector(
     "#todo-description-input"
   );
@@ -59,9 +59,9 @@ function editTodo(event) {
   const description = encodeURIComponent(todoItem.dataset.description);
   const option1 = encodeURIComponent(todoItem.dataset.option1);
   const option2 = encodeURIComponent(todoItem.dataset.option2);
-  const date = encodeURIComponent(todoItem.dataset.date);
+  // const date = encodeURIComponent(todoItem.dataset.date);
   // console.log("check the date",date);
-  const editUrl = `edit.html?id=${todoId}&title=${title}&description=${description}&option1=${option1}&option2=${option2}&date=${date}`;
+  const editUrl = `edit.html?id=${todoId}&title=${title}&description=${description}&option1=${option1}&option2=${option2}`;
 
   window.location.href = editUrl;
 }
@@ -73,15 +73,28 @@ function createTodoElement(todo) {
   const item = itemTemplate.content.cloneNode(true);
   const container = item.querySelector(".todo-item");
   container.id = todo.id;
-  container.dataset.title = todo.title; // Store title data
+  // Get the current date
+const currentDate = new Date();
+
+// Define an array of Chinese weekday names
+const chineseWeekdays = ["日", "一", "二", "三", "四", "五", "六"];
+
+// Get the year, month, day, and weekday
+const year = currentDate.getFullYear();
+const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Month is zero-based
+const day = String(currentDate.getDate()).padStart(2, "0");
+const weekday = chineseWeekdays[currentDate.getDay()]; // 0 = Sunday, 1 = Monday, ...
+
+// Create the formatted date string
+const formattedDate = `${year}-${month}-${day}(${weekday})`;
+
+console.log(formattedDate); // Output: e.g., 2023-09-27(三)
+
+  container.dataset.title = formattedDate; // Store title data
   container.dataset.description = todo.description; // Store description data
   container.dataset.option1 = todo.option1; // Store option1 data
   container.dataset.option2 = todo.option2; // Store option2 data
-  const currentDate = new Date();
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const formattedDate = currentDate.toLocaleDateString(undefined, options);
-  todo.date=formattedDate;
-  container.dataset.date = formattedDate;
+
   
   
 
@@ -97,8 +110,8 @@ function createTodoElement(todo) {
   const option2 = item.querySelector("p.todo-option2");
   option2.textContent = container.dataset.option2;
 
-  const showDateElement = item.querySelector("p.todo-date");
-  showDateElement.textContent = container.dataset.date;
+  // const showDateElement = item.querySelector("p.todo-date");
+  // showDateElement.textContent = container.dataset.date;
 
   console.log("show title:",title);
   console.log("ahow option1",option1);

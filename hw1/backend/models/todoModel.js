@@ -21,9 +21,9 @@ const todoSchema = new mongoose.Schema(
     option2: {
       type: String, // Change the data type as needed (e.g., String, Number, etc.)
     },
-    date:{
-      type: String,
-    }
+    // date:{
+    //   type: String,
+    // }
   },
   // The second argument is an options object.
   // In this case, we want to rename _id to id and remove __v

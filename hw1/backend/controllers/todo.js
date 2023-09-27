@@ -18,10 +18,10 @@ export const createTodo = async (req, res) => {
   try {
     const newTodo = await TodoModel.create({
       title: "", // Empty title
-      description: "", // Empty description
-      option1: "", // Empty option1
-      option2: "", // Empty option2
-      date: "", // Empty date
+      description:"", // Empty description
+      option1:"", // Empty option1
+      option2:"", // Empty option2
+      // date: "", // Empty date
       completed: false,
     });
     return res.status(201).json(newTodo);
