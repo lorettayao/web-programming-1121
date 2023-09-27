@@ -31,32 +31,36 @@ function setupEventListeners() {
   // const showdate=document.querySelector("p.showdate")
   const editButton = document.getElementById("#edit-button");
 
-  addTodoButton.addEventListener("click", async () => {
-    const title = todoInput.value;
-    const description = todoDescriptionInput.value;
-    const option1 = todoOption1.value;
-    const option2 = todoOption2.value;
+  // addTodoButton.addEventListener("click", async () => {
+  //   const title = todoInput.value;
+  //   const description = todoDescriptionInput.value;
+  //   const option1 = todoOption1.value;
+  //   const option2 = todoOption2.value;
     
-    // console.log("write_2 vlaue:",write_op2);
-    if (!title) {
-      alert("Please enter a todo title!");
-      return;
-    }
-    if (!description) {
-      alert("Please enter a todo description!");
-      return;
-    }
+  //   // console.log("write_2 vlaue:",write_op2);
+    
+  //   try {
+  //     const todo = await createTodo({ title, description, option1, option2 });
+  //     // console.log(write_op1);
+  //     console.log(todo);
+  //     renderTodo(todo);
+  //   } catch (error) {
+  //     alert("Failed to create todo!");
+  //     return;
+  //   }
+  //   todoInput.value = "";
+  //   todoDescriptionInput.value = "";
+  // });
+  addTodoButton.addEventListener("click", async () => {
     try {
-      const todo = await createTodo({ title, description, option1, option2 });
-      // console.log(write_op1);
+      const todo = await createTodo({});
       console.log(todo);
       renderTodo(todo);
     } catch (error) {
+      console.error("Error creating todo:", error.response.data);
       alert("Failed to create todo!");
       return;
     }
-    todoInput.value = "";
-    todoDescriptionInput.value = "";
   });
   
 }

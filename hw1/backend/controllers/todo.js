@@ -13,25 +13,15 @@ export const getTodos = async (req, res) => {
   }
 };
 
-// Create a todo
 export const createTodo = async (req, res) => {
-  const { title, description, option1, option2, date } = req.body;
-
-  // Check title, description, option1, and option2
-  if (!title || !description || !option1 || !option2) {
-    return res
-      .status(400)
-      .json({ message: "Title, description, option1, and option2 are required!" });
-  }
-
-  // Create a new todo
+  
   try {
     const newTodo = await TodoModel.create({
-      title,
-      description,
-      option1,
-      option2,
-      date,
+      title: "", // Empty title
+      description: "", // Empty description
+      option1: "", // Empty option1
+      option2: "", // Empty option2
+      date: "", // Empty date
       completed: false,
     });
     return res.status(201).json(newTodo);
@@ -39,6 +29,9 @@ export const createTodo = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
+
 
 // Update a todo
 export const updateTodo = async (req, res) => {
