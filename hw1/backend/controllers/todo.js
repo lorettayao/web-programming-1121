@@ -15,7 +15,7 @@ export const getTodos = async (req, res) => {
 
 // Create a todo
 export const createTodo = async (req, res) => {
-  const { title, description, option1, option2 } = req.body;
+  const { title, description, option1, option2, date } = req.body;
 
   // Check title, description, option1, and option2
   if (!title || !description || !option1 || !option2) {
@@ -31,6 +31,7 @@ export const createTodo = async (req, res) => {
       description,
       option1,
       option2,
+      date,
       completed: false,
     });
     return res.status(201).json(newTodo);
@@ -42,7 +43,7 @@ export const createTodo = async (req, res) => {
 // Update a todo
 export const updateTodo = async (req, res) => {
   const { id } = req.params;
-  const { title, description, completed, option1, option2 } = req.body;
+  const { title, description, completed, option1, option2, date } = req.body;
 
   try {
     // Check if the id is valid
@@ -57,7 +58,7 @@ export const updateTodo = async (req, res) => {
     if (completed !== undefined) existedTodo.completed = completed;
     if (option1 !== undefined) existedTodo.option1 = option1;
     if (option2 !== undefined) existedTodo.option2 = option2;
-
+    if (date !== undefined) existedTodo.date = date;
     // Save the updated todo
     await existedTodo.save();
 

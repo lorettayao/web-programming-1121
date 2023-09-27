@@ -3,6 +3,7 @@
 const instance = axios.create({
     baseURL: "http://localhost:8000/api",
   });
+
 document.addEventListener("DOMContentLoaded", async function () {
     // Get todo data for editing from some source (e.g., URL query parameter or local storage)
     const todoId = getTodoIdFromQueryParam(); // Implement this function to extract the todo ID
@@ -24,6 +25,41 @@ document.addEventListener("DOMContentLoaded", async function () {
         editOption1.value=todoData.option1;
         editOption2.value=todoData.option2;
 
+// Get the select elements
+const editOption1Select = document.getElementById("edit-option1");
+const editOption2Select = document.getElementById("edit-option2");
+
+// Get the "Add" buttons
+const addOption1Button = document.getElementById("add-option1-button");
+const addOption2Button = document.getElementById("add-option2-button");
+
+// Event listeners for "Add" buttons
+addOption1Button.addEventListener("click", () => {
+    const newOption1 = prompt("Enter a new option for Option1:");
+    if (newOption1) {
+        const optionElement = document.createElement("option");
+        optionElement.textContent = newOption1;
+        editOption1Select.appendChild(optionElement);
+    }
+});
+
+addOption2Button.addEventListener("click", () => {
+    const newOption2 = prompt("Enter a new option for Option2:");
+    if (newOption2) {
+        const optionElement = document.createElement("option");
+        optionElement.textContent = newOption2;
+        editOption2Select.appendChild(optionElement);
+    }
+});
+
+// Event listener for the "Save" button
+document.getElementById("save-button").addEventListener("click", () => {
+    const selectedOptions = getSelectedOptions();
+
+    // Redirect to index.html with the selected options as query parameters
+    const redirectUrl = `index.html?option1=${encodeURIComponent(selectedOptions.option1)}&option2=${encodeURIComponent(selectedOptions.option2)}`;
+    window.location.href = redirectUrl;
+});      
 
         // Add click event listener to "Save" button
         const saveButton = document.getElementById("save-button");
@@ -96,3 +132,13 @@ function getTodoIdFromQueryParam() {
     console.log("the todoID",todoId);
     return todoId;
 }
+
+
+// Function to get the selected options for option1 and option2
+function getSelectedOptions() {
+    return {
+        option1: editOption1Select.value,
+        option2: editOption2Select.value,
+    };
+}
+
