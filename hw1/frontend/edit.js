@@ -102,6 +102,8 @@ async function getTodo(todoId) {
         const todos = response.data;
         const todo = todos.find((t) => t.id === todoId);
         if (todo) {
+            console.log("title:",todo.title);
+            console.log("date",todo.data);
             return todo;
         } else {
             throw new Error(`Todo with ID ${todoId} not found.`);
@@ -130,6 +132,7 @@ function getTodoIdFromQueryParam() {
     const urlParams = new URLSearchParams(window.location.search);
     const todoId = urlParams.get("id");
     console.log("the todoID",todoId);
+    // console.log(todoId);
     return todoId;
 }
 

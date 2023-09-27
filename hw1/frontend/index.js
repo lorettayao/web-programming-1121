@@ -7,7 +7,6 @@ const instance = axios.create({
 });
 
 async function main() {
-  
   setupEventListeners();
   try {
     const todos = await getTodos();
@@ -28,29 +27,10 @@ function setupEventListeners() {
   const todoOption1 =document.querySelector("#option1-input");
 
   const todoOption2 =document.querySelector("#option2-input");
-  // const showdate=document.querySelector("p.showdate")
+  // const todoDate=document.getElementsByClassName("#");
   const editButton = document.getElementById("#edit-button");
-
-  // addTodoButton.addEventListener("click", async () => {
-  //   const title = todoInput.value;
-  //   const description = todoDescriptionInput.value;
-  //   const option1 = todoOption1.value;
-  //   const option2 = todoOption2.value;
-    
-  //   // console.log("write_2 vlaue:",write_op2);
-    
-  //   try {
-  //     const todo = await createTodo({ title, description, option1, option2 });
-  //     // console.log(write_op1);
-  //     console.log(todo);
-  //     renderTodo(todo);
-  //   } catch (error) {
-  //     alert("Failed to create todo!");
-  //     return;
-  //   }
-  //   todoInput.value = "";
-  //   todoDescriptionInput.value = "";
-  // });
+  
+  
   addTodoButton.addEventListener("click", async () => {
     try {
       const todo = await createTodo({});
@@ -72,6 +52,7 @@ function renderTodo(todo) {
 }
 
 function editTodo(event) {
+  
   const todoItem = event.target.closest(".todo-item");
   const todoId = todoItem.id;
   const title = encodeURIComponent(todoItem.dataset.title);
@@ -79,11 +60,12 @@ function editTodo(event) {
   const option1 = encodeURIComponent(todoItem.dataset.option1);
   const option2 = encodeURIComponent(todoItem.dataset.option2);
   const date = encodeURIComponent(todoItem.dataset.date);
-
+  // console.log("check the date",date);
   const editUrl = `edit.html?id=${todoId}&title=${title}&description=${description}&option1=${option1}&option2=${option2}&date=${date}`;
 
   window.location.href = editUrl;
 }
+
 
 
 function createTodoElement(todo) {
@@ -95,9 +77,13 @@ function createTodoElement(todo) {
   container.dataset.description = todo.description; // Store description data
   container.dataset.option1 = todo.option1; // Store option1 data
   container.dataset.option2 = todo.option2; // Store option2 data
-  const currentDate = new Date().toLocaleDateString();
-  container.dataset.date = currentDate; // Store date data
-  // console.log("show the title",container.dataset.date);
+  const currentDate = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleDateString(undefined, options);
+  todo.date=formattedDate;
+  container.dataset.date = formattedDate;
+  
+  
 
   const title = item.querySelector("p.todo-title");
   title.innerText = container.dataset.title;
@@ -111,17 +97,12 @@ function createTodoElement(todo) {
   const option2 = item.querySelector("p.todo-option2");
   option2.textContent = container.dataset.option2;
 
-  const showDateElement = item.querySelector(".showdate");
+  const showDateElement = item.querySelector("p.todo-date");
   showDateElement.textContent = container.dataset.date;
 
   console.log("show title:",title);
   console.log("ahow option1",option1);
 
-// Select the .showdate element within the cloned item
-// const showDateElement = item.querySelector(".showdate");
-
-// Set the text content of the .showdate element to the formatted date
-// showDateElement.textContent = currentDate;
 
   const deleteButton = item.querySelector("button.delete-todo");
   deleteButton.dataset.id = todo.id;
