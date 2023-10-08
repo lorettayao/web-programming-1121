@@ -21,6 +21,7 @@ export type CardListProps = {
   id: string;
   name: string;
   cards: CardProps[];
+  
 };
 
 export default function CardList({ id, name, cards }: CardListProps) {

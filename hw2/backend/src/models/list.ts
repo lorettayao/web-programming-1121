@@ -9,6 +9,12 @@ interface ListDocument
   cards: Types.ObjectId[];
 }
 
+interface ListDocument extends Omit<ListData, "id" | "cards">, mongoose.Document {
+  cards: Types.ObjectId[];
+  imageData: mongoose.Schema.Types.Mixed; // Field for image data
+}
+
+
 interface ListModel extends mongoose.Model<ListDocument> {}
 
 // We enforce the type by adding `<ListDocument>` after `mongoose.Schema`.
@@ -24,6 +30,7 @@ const ListSchema = new mongoose.Schema<ListDocument>(
         ref: "Card",
       },
     ],
+    imageData: mongoose.Schema.Types.Mixed,
   },
   {
     timestamps: true,

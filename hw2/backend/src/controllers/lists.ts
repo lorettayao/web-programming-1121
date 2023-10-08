@@ -59,6 +59,12 @@ export const createList = async (
 ) => {
   try {
     const { id } = await ListModel.create(req.body);
+    // const newList = new ListModel({
+    //   name:,
+    //   cards:[],
+    //   imageData,
+    // });
+
     return res.status(201).json({ id });
   } catch (error) {
     genericErrorHandler(error, res);

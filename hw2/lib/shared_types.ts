@@ -42,7 +42,13 @@ export type DeleteCardResponse = "OK";
 
 export type GetListsResponse = Omit<ListData, "cards">[];
 
-export type CreateListPayload = Omit<ListData, "id" | "cards">;
+export type CreateListPayload = Omit<ListData, "id" | "cards"> &{
+  imageData: {
+    url: string;
+    description: string;
+  };
+};
+
 
 export type CreateListResponse = Pick<ListData, "id">;
 
