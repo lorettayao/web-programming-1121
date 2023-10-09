@@ -23,7 +23,9 @@ export default function NewListDialog({ open, onClose }: NewListDialogProps) {
 
   const handleAddList = async () => {
     try {
-      await createList({ name: textfieldRef.current?.value ?? "" });
+      const name = textfieldRef.current?.value ?? "";
+      const photoUrl = "https://thedispatchonline.net/wp-content/uploads/2020/06/FineLinealbumcover-900x885.jpg"; // Replace with your desired default URL
+      await createList({ name:name, photoUrl: photoUrl }); // Include photoUrl when creating the list
       fetchLists();
     } catch (error) {
       alert("Error: Failed to create list");

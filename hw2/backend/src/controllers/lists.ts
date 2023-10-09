@@ -21,6 +21,7 @@ export const getLists = async (_: Request, res: Response<GetListsResponse>) => {
       return {
         id: list.id,
         name: list.name,
+        photoUrl:list.photoUrl,
       };
     });
 
@@ -46,6 +47,7 @@ export const getList = async (
       id: lists.id,
       name: lists.name,
       cards: lists.cards as unknown as CardData[],
+      photoUrl:lists.photoUrl,
     });
   } catch (error) {
     genericErrorHandler(error, res);
@@ -58,12 +60,11 @@ export const createList = async (
   res: Response<CreateListResponse>,
 ) => {
   try {
-    const { id } = await ListModel.create(req.body);
-    // const newList = new ListModel({
-    //   name:,
-    //   cards:[],
-    //   imageData,
-    // });
+    const { id } = await ListModel.create({
+      ...req.body,
+      photoUrl: req.body.photoUrl, // Include the photoUrl property
+    });
+    
 
     return res.status(201).json({ id });
   } catch (error) {
@@ -85,6 +86,7 @@ export const updateList = async (
       id,
       {
         name: name,
+        
       },
       { new: true },
     );

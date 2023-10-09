@@ -11,9 +11,8 @@ interface ListDocument
 
 interface ListDocument extends Omit<ListData, "id" | "cards">, mongoose.Document {
   cards: Types.ObjectId[];
-  imageData: mongoose.Schema.Types.Mixed; // Field for image data
+  photoUrl: string;
 }
-
 
 interface ListModel extends mongoose.Model<ListDocument> {}
 
@@ -30,7 +29,11 @@ const ListSchema = new mongoose.Schema<ListDocument>(
         ref: "Card",
       },
     ],
-    imageData: mongoose.Schema.Types.Mixed,
+   
+    photoUrl: {
+      type: String,
+      default: "https://thedispatchonline.net/wp-content/uploads/2020/06/FineLinealbumcover-900x885.jpg", 
+    },
   },
   {
     timestamps: true,

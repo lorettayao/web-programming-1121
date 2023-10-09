@@ -20,6 +20,7 @@ export type ListData = {
   id: string;
   name: string;
   cards: CardData[];
+  photoUrl:string;
 };
 
 export type GetCardsResponse = CardData[];
@@ -43,10 +44,7 @@ export type DeleteCardResponse = "OK";
 export type GetListsResponse = Omit<ListData, "cards">[];
 
 export type CreateListPayload = Omit<ListData, "id" | "cards"> &{
-  imageData: {
-    url: string;
-    description: string;
-  };
+  photoUrl:string
 };
 
 
