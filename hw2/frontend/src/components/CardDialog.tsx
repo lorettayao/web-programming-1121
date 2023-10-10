@@ -33,6 +33,7 @@ type EditCardDialogProps = {
   listId: string;
   cardId: string;
   title: string;
+  youtubelink:string;
   description: string;
 };
 
@@ -42,18 +43,25 @@ export default function CardDialog(props: CardDialogProps) {
   const { variant, open, onClose, listId } = props;
   const title = variant === "edit" ? props.title : "";
   const description = variant === "edit" ? props.description : "";
+  const youtubelink= variant === "edit" ? props.youtubelink : "";
 
   const [edittingTitle, setEdittingTitle] = useState(variant === "new");
   const [edittingDescription, setEdittingDescription] = useState(
     variant === "new",
   );
+  const [edittingYoutubelink, setEdittingYoutubelink] = useState(
+    variant === "new",
+  );
+
 
   // using a state variable to store the value of the input, and update it on change is another way to get the value of a input
   // however, this method is not recommended for large forms, as it will cause a re-render on every change
   // you can read more about it here: https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
+  const [newYoutubelink, setNewYoutubelink] = useState(youtubelink);
   const [newListId, setNewListId] = useState(listId);
+
 
   const { lists, fetchCards } = useCards();
 
@@ -62,6 +70,7 @@ export default function CardDialog(props: CardDialogProps) {
     if (variant === "edit") {
       setNewTitle(title);
       setNewDescription(description);
+      setNewYoutubelink(youtubelink);
       setNewListId(listId);
     }
   };
@@ -72,12 +81,14 @@ export default function CardDialog(props: CardDialogProps) {
         await createCard({
           title: newTitle,
           description: newDescription,
+          youtubelink: newYoutubelink,
           list_id: listId,
         });
       } else {
         if (
           newTitle === title &&
           newDescription === description &&
+          newYoutubelink === youtubelink &&
           newListId === listId
         ) {
           return;
@@ -128,7 +139,7 @@ export default function CardDialog(props: CardDialogProps) {
               defaultValue={title}
               onChange={(e) => setNewTitle(e.target.value)}
               className="grow"
-              placeholder="Enter a title for this card..."
+              placeholder="add a song"
             />
           </ClickAwayListener>
         ) : (
@@ -171,6 +182,7 @@ export default function CardDialog(props: CardDialogProps) {
               placeholder="singer"
               onChange={(e) => setNewDescription(e.target.value)}
             />
+    
           </ClickAwayListener>
         ) : (
           <button
@@ -178,6 +190,32 @@ export default function CardDialog(props: CardDialogProps) {
             className="w-full rounded-md p-2 hover:bg-white/10"
           >
             <Typography className="text-start">{newDescription}</Typography>
+          </button>
+        )}
+{/* doing the link by copying the description thing */}
+        {edittingYoutubelink ? (
+          <ClickAwayListener
+            onClickAway={() => {
+              if (variant === "edit") {
+                setEdittingYoutubelink(false);
+              }
+            }}
+          >
+            
+            <textarea
+              className="bg-white/0 p-2"
+              autoFocus
+              defaultValue={youtubelink}
+              placeholder="youtube link: "
+              onChange={(e) => setNewYoutubelink(e.target.value)}
+            />
+          </ClickAwayListener>
+        ) : (
+          <button
+            onClick={() => setEdittingYoutubelink(true)}
+            className="w-full rounded-md p-2 hover:bg-white/10"
+          >
+            <Typography className="text-start">{newYoutubelink}</Typography>
           </button>
         )}
         <DialogActions>

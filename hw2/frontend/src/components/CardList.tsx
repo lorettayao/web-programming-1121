@@ -26,9 +26,10 @@ import DialogContent from "@mui/material/DialogContent";
 import Checkbox from '@mui/material/Checkbox';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
-import Alert from '@mui/material/Alert';
-
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 
 
@@ -48,6 +49,12 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
+//   const [cardItems, setCardItems] = useState<CardProps[]>(initialCardItems); 
+//   const generateID = () => {
+//     return Math.random().toString(36).substr(2, 9);
+// };
+
 
 
   const handleSelectAll = () => {
@@ -58,21 +65,50 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
     }
     setSelectAll(!selectAll);
   };
-  const handleCardSelect = (cardId: string) => {
-    if (selectedCards.includes(cardId)) {
-      setSelectedCards(selectedCards.filter((id) => id !== cardId));
+  const handleSelectOne = (id: string) => {
+    if (selected.includes(id)) {
+      setSelected(selected.filter(item => item !== id));
     } else {
-      setSelectedCards([...selectedCards, cardId]);
+      setSelected(prev => [...prev, id]);
     }
   };
+  // const handleCardSelect = (cardId: string) => {
+  //   if (selectedCards.includes(cardId)) {
+  //     setSelectedCards(selectedCards.filter((id) => id !== cardId));
+  //   } else {
+  //     setSelectedCards([...selectedCards, cardId]);
+  //   }
+  // };
   const handleDeleteSelected = () => {
-    if (selectedCards.length > 0) {
+    if (selected.length > 0) {
+      // Perform the delete operation based on the selected IDs
+      console.log('Deleting: ', selected);
+    
+      setSelected([]);
       setConfirmDialog(true);
-    } else {
+      // Also update your song list accordingly
+    }
+    else {
       // No songs selected, show an alert
       alert('請選擇要刪除的歌曲'); // replace this with a more user-friendly UI alert
     }
   };
+  const handleAddNewCard = () => {
+    setOpenNewCardDialog(true);
+};
+// const handleNewCardSubmit = (title: string, description: string, youtubelink: string) => {
+//   const newCard = { 
+//       id: generateID(), 
+//       title, 
+//       description, 
+//       youtubelink  // Ensure your CardProps type definition includes youtubeLink property
+//   };
+
+//   setCardItems(prevCardItems => [...prevCardItems, newCard]);
+//   setOpenNewCardDialog(false);  // Assuming this state controls the visibility of your dialog
+// };
+
+
   const handleConfirmDelete = () => {
     // Function to delete the selected cards
     // For example: deleteCards(selectedCards);
@@ -201,7 +237,7 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
             {cards.length} {cards.length === 1 ? "card" : "songs"}
           </div>
           {cards.map((card) => (
-            <Card key={card.id} {...card} />
+            <Card key={card.id} {...card} youtubelink={card.youtubelink} />
           ))}
           <Button
             variant="contained"
@@ -240,32 +276,33 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
 </Dialog>
 
 {/* dialog for showing the list */}
-
 <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="md">
-  {/* ... existing Dialog content */}
-  <DialogTitle>List Details</DialogTitle>
-  <DialogContent>
-          <h1>List: {name}</h1>
-          <p>ID: {id}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-            {cards.map((card) => (
-              <div key={card.id} style={{ display: 'flex', alignItems: 'center' }}>
-                <Checkbox />
-                <div>
-                  <strong>Title:</strong> {card.title} <br />
-                  <strong>Description:</strong> {card.description} <br />
-                  {/* If you have other details to show, add them here */}
-                </div>
-              </div>
-            ))}
-          </div>
+        <DialogTitle>List Details</DialogTitle>
+        <DialogContent>
+          <Table>
+            <TableBody>
+              {cards.map(card => (
+                <TableRow key={card.id}>
+                  <TableCell padding="checkbox">
+                    <Checkbox 
+                      checked={selected.includes(card.id)}
+                      onChange={() => handleSelectOne(card.id)}
+                    />
+                  </TableCell>
+                  <TableCell>{card.title}</TableCell>
+                  <TableCell>{card.description}</TableCell>
+                  <TableCell><a href={card.youtubelink} target="_blank" rel="noopener noreferrer">YouTube</a></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </DialogContent>
-  <DialogActions>
-    <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
-    <Button onClick={() => setOpenNewCardDialog(true)} color="primary">Add</Button>
-  </DialogActions>
-</Dialog>
-      
+        <DialogActions>
+          <Button onClick={handleSelectAll} color="primary">Select All</Button>
+          <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
+          <Button onClick={handleAddNewCard} color="primary">Add</Button> {/* **ADD THIS BUTTON** */}
+        </DialogActions>
+      </Dialog>   
     </>
     
   );

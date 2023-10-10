@@ -9,9 +9,10 @@ export type CardProps = {
   title: string;
   description: string;
   listId: string;
+  youtubelink: string;
 };
 
-export default function Card({ id, title, description, listId }: CardProps ) {
+export default function Card({ id, title, description, listId ,youtubelink}: CardProps &{youtubelink:string}) {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -31,8 +32,8 @@ export default function Card({ id, title, description, listId }: CardProps ) {
         onClose={() => setOpen(false)}
         title={title}
         description={description}
-        // songlink={songlink}
         listId={listId}
+        youtubelink={youtubelink}
         cardId={id}
       />
     </>

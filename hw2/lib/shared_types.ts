@@ -31,7 +31,9 @@ export type GetCardResponse = CardData;
 // a few examples of utility types:
 // for more information, see: https://www.typescriptlang.org/docs/handbook/utility-types.html
 // You don't need to memorize these, but it's good to know they exist.
-export type CreateCardPayload = Omit<CardData, "id">;
+export type CreateCardPayload = Omit<CardData, "id">&{
+  youtubelink:string
+};
 
 export type CreateCardResponse = Pick<CardData, "id">;
 
