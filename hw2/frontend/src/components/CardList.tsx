@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-
+import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -33,6 +33,16 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
 
   const { fetchLists } = useCards();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <Link to={`/page/${id}`}>
+      <img
+        src={photoUrl}
+        alt="List Photo"
+        className="w-20 h-20 cursor-pointer"
+      />
+    </Link>
+  );
 
   useEffect(() => {
     // Make an API call to fetch the photoUrl for the specific list
@@ -79,6 +89,8 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
       alert("Error: Failed to delete list");
     }
   };
+  
+  
 
   return ( 
     <>
@@ -86,7 +98,12 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
         <div className="flex gap-4">
           
           {photoUrl && (
-            <img src={photoUrl} alt="List Photo" className="w-20 h-20" />
+            <img
+              src={photoUrl}
+              alt="List Photo"
+              className="w-20 h-20 cursor-pointer"
+              // onClick={handlePhotoClick}
+            />
           )}
           {edittingName ? (
             <ClickAwayListener onClickAway={handleUpdateName}>
@@ -118,6 +135,9 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
         </div>
         <Divider variant="middle" sx={{ mt: 1, mb: 2 }} />
         <div className="flex flex-col gap-4">
+          <div className="text-center">
+            {cards.length} {cards.length === 1 ? "card" : "songs"}
+          </div>
           {cards.map((card) => (
             <Card key={card.id} {...card} />
           ))}
@@ -136,6 +156,8 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
         onClose={() => setOpenNewCardDialog(false)}
         listId={id}
       />
+      
     </>
+    
   );
 }
