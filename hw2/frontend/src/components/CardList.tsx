@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -25,24 +25,18 @@ export type CardListProps = {
   name: string;
   cards: CardProps[];
   photoUrl:string;
+  // deleteMode: boolean;
+
 };
 
-export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
+export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardListProps & { deleteMode: boolean }) {
   const [openNewCardDialog, setOpenNewCardDialog] = useState(false);
   const [edittingName, setEdittingName] = useState(false);
 
   const { fetchLists } = useCards();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  return (
-    <Link to={`/page/${id}`}>
-      <img
-        src={photoUrl}
-        alt="List Photo"
-        className="w-20 h-20 cursor-pointer"
-      />
-    </Link>
-  );
+  
 
   useEffect(() => {
     // Make an API call to fetch the photoUrl for the specific list
@@ -95,15 +89,30 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
   return ( 
     <>
       <Paper className="w-80 p-6">
-        <div className="flex gap-4">
-          
+        {/* <div className="flex gap-4"> */}
+        <div style={{ position: 'relative' }}>  {/* Add this wrapper div */}
+      {deleteMode && (
+        <IconButton 
+          color="error" 
+          onClick={handleDelete} 
+          style={{ 
+            position: 'absolute', 
+            top: 0, 
+            right: 0, 
+            transform: 'translate(50%, -50%)'  // Adjust the position as per your need
+          }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      )}
           {photoUrl && (
-            <img
-              src={photoUrl}
-              alt="List Photo"
-              className="w-20 h-20 cursor-pointer"
-              // onClick={handlePhotoClick}
-            />
+            <Link to={`/list/${id}`}>
+              <img 
+                  src={photoUrl} 
+                  alt="List Photo" 
+                  className="w-20 h-20 cursor-pointer" 
+              />
+            </Link>
           )}
           {edittingName ? (
             <ClickAwayListener onClickAway={handleUpdateName}>
@@ -126,11 +135,12 @@ export default function CardList({ id, name, cards, photoUrl }: CardListProps) {
               </Typography>
             </button>
           )}
-          <div className="grid place-items-center">
+          {/* this is the old delete button */}
+          {/* <div className="grid place-items-center">
             <IconButton color="error" onClick={handleDelete}>
               <DeleteIcon />
             </IconButton>
-          </div>
+          </div> */}
           
         </div>
         <Divider variant="middle" sx={{ mt: 1, mb: 2 }} />
