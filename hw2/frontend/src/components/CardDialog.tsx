@@ -168,7 +168,7 @@ export default function CardDialog(props: CardDialogProps) {
               className="bg-white/0 p-2"
               autoFocus
               defaultValue={description}
-              placeholder="Add a more detailed description..."
+              placeholder="singer"
               onChange={(e) => setNewDescription(e.target.value)}
             />
           </ClickAwayListener>

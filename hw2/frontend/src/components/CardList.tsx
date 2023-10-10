@@ -21,6 +21,14 @@ import { useEffect } from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
+// import { describe } from "node:test";
+// import { Description } from "@mui/icons-material";
+import Checkbox from '@mui/material/Checkbox';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import Alert from '@mui/material/Alert';
+
+
 
 
 
@@ -37,6 +45,40 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const [openNewCardDialog, setOpenNewCardDialog] = useState(false);
   const [edittingName, setEdittingName] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);  // New state for controlling the Dialog's visibility
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState(false);
+
+
+  const handleSelectAll = () => {
+    if (!selectAll) {
+      setSelectedCards(cards.map((card) => card.id));
+    } else {
+      setSelectedCards([]);
+    }
+    setSelectAll(!selectAll);
+  };
+  const handleCardSelect = (cardId: string) => {
+    if (selectedCards.includes(cardId)) {
+      setSelectedCards(selectedCards.filter((id) => id !== cardId));
+    } else {
+      setSelectedCards([...selectedCards, cardId]);
+    }
+  };
+  const handleDeleteSelected = () => {
+    if (selectedCards.length > 0) {
+      setConfirmDialog(true);
+    } else {
+      // No songs selected, show an alert
+      alert('請選擇要刪除的歌曲'); // replace this with a more user-friendly UI alert
+    }
+  };
+  const handleConfirmDelete = () => {
+    // Function to delete the selected cards
+    // For example: deleteCards(selectedCards);
+    setConfirmDialog(false);
+    setSelectedCards([]); // Clear selected cards after deletion
+  };
 
 
   const { fetchLists } = useCards();
@@ -176,18 +218,60 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
         onClose={() => setOpenNewCardDialog(false)}
         listId={id}
       />
+{/* dialog for the delete prompt */}
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>List Details</DialogTitle>
-        <DialogContent>
-          {/* You can put the content of your ListDetailPage here */}
+<Dialog open={confirmDialog} onClose={() => setConfirmDialog(false)}>
+  <DialogTitle>Delete Songs</DialogTitle>
+  <DialogContent>
+    <DialogContentText>
+      Are you sure you want to delete the following songs?
+      <ul>
+        {selectedCards.map(cardId => {
+          const card = cards.find(c => c.id === cardId);
+          return <li key={cardId}>{card?.title}</li>
+        })}
+      </ul>
+    </DialogContentText>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setConfirmDialog(false)} color="primary">Cancel</Button>
+    <Button onClick={handleConfirmDelete} color="secondary">Confirm Delete</Button>
+  </DialogActions>
+</Dialog>
+
+{/* dialog for showing the list */}
+
+<Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="md">
+  {/* ... existing Dialog content */}
+  <DialogTitle>List Details</DialogTitle>
+  <DialogContent>
           <h1>List: {name}</h1>
           <p>ID: {id}</p>
-          {/* ... other details */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            {cards.map((card) => (
+              <div key={card.id} style={{ display: 'flex', alignItems: 'center' }}>
+                <Checkbox />
+                <div>
+                  <strong>Title:</strong> {card.title} <br />
+                  <strong>Description:</strong> {card.description} <br />
+                  {/* If you have other details to show, add them here */}
+                </div>
+              </div>
+            ))}
+          </div>
         </DialogContent>
-      </Dialog>
+  <DialogActions>
+    <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
+    <Button onClick={() => setOpenNewCardDialog(true)} color="primary">Add</Button>
+  </DialogActions>
+</Dialog>
       
     </>
     
   );
 }
+
+
+
+
+        
