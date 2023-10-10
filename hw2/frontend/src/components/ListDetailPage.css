@@ -1,0 +1,32 @@
+/* Customize these styles or add more according to your requirements */
+
+.list-detail-container {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .list-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .list-id {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .list-items {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .item {
+    margin-bottom: 10px;
+    color: #444;
+  }
+  

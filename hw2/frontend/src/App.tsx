@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Add as AddIcon } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
@@ -7,7 +7,7 @@ import CardList from "@/components/CardList";
 import HeaderBar from "@/components/HeaderBar";
 import NewListDialog from "@/components/NewListDialog";
 import useCards from "@/hooks/useCards";
-import ListDetailPage from "./components/ListDetailPage";
+// import ListDetailPage from "./components/ListDetailPage";
 
 function App() {
   const { lists, fetchLists, fetchCards } = useCards();
@@ -20,7 +20,8 @@ function App() {
   }, [fetchCards, fetchLists]);
 
   return (
-    <Router>
+    // <Router>
+    <>
       <HeaderBar />
       <main className="mx-auto px-6 sm:px-12 lg:px-24 py-12">
         <div className="w-full flex justify-between items-center mb-4">
@@ -54,11 +55,13 @@ function App() {
         open={newListDialogOpen}
         onClose={() => setNewListDialogOpen(false)}
       />
-      <Routes>
+      {/* <Routes>
         <Route path="/list/:id" element={<ListDetailPage />} />
       </Routes>
-    </Router>
+    </Router> */}
+    </>
   );
 }
+
 
 export default App;

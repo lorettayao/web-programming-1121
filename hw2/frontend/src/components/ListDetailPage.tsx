@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';  
+import axios from 'axios';
+// import './ListDetailPage.css'; // Import CSS file here
 
 interface ListType {
   id: string;
@@ -10,17 +11,16 @@ interface ListType {
     name: string;
     description: string;
   }>;
-  // include other properties as needed
 }
 
-function ListDetailPage() {
+const ListDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [list, setList] = useState<ListType | null>(null);  
-  const [loading, setLoading] = useState(true);  
-  const [error, setError] = useState<any>(null);  
+  const [list, setList] = useState<ListType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    if (!id) return;  // Add this check to ensure id is available before fetching
+    if (!id) return;
 
     axios.get(`/api/lists/${id}`)
       .then(response => {
@@ -34,30 +34,23 @@ function ListDetailPage() {
       });
   }, [id]);
 
-  if (loading) {
-    return <p>Loading list details...</p>;
-  }
-
-  if (error) {
-    return <p>Error loading list details!</p>;
-  }
-
-  if (!list) {
-    return <p>List not found!</p>;
-  }
+  if (loading) return <p>Loading list details...</p>;
+  if (error) return <p>Error loading list details!</p>;
+  if (!list) return <p>List not found!</p>;
 
   return (
-    <div>
-      <h1>List: {list.name}</h1>
-      <p>ID: {id}</p>
-      <ul>
+    <div className="list-detail-container">
+      <h1 className="list-title">{list.name}</h1>
+      <p className="list-id">ID: {id}</p>
+      <ul className="list-items">
         {list.items.map(item => (
-          <li key={item.id}>{item.name} - {item.description}</li>
+          <li key={item.id} className="item">
+            {item.name} - {item.description}
+          </li>
         ))}
       </ul>
-      {/* You can add more detailed information about the list here */}
     </div>
   );
-}
+};
 
 export default ListDetailPage;

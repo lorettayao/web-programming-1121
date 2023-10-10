@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -18,6 +18,10 @@ import type { CardProps } from "./Card";
 import CardDialog from "./CardDialog";
 
 import { useEffect } from 'react';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+
 
 
 export type CardListProps = {
@@ -32,6 +36,8 @@ export type CardListProps = {
 export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardListProps & { deleteMode: boolean }) {
   const [openNewCardDialog, setOpenNewCardDialog] = useState(false);
   const [edittingName, setEdittingName] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);  // New state for controlling the Dialog's visibility
+
 
   const { fetchLists } = useCards();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -84,6 +90,9 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
     }
   };
   
+  const handlePhotoClick = () => {
+    setOpenDialog(true);  // Open the Dialog when the photo is clicked
+  };
   
 
   return ( 
@@ -106,13 +115,14 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
         </IconButton>
       )}
           {photoUrl && (
-            <Link to={`/list/${id}`}>
+            // <Link to={`/list/${id}`}>
               <img 
                   src={photoUrl} 
                   alt="List Photo" 
                   className="w-20 h-20 cursor-pointer" 
+                  onClick={handlePhotoClick}
               />
-            </Link>
+            // </Link>
           )}
           {edittingName ? (
             <ClickAwayListener onClickAway={handleUpdateName}>
@@ -166,6 +176,16 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
         onClose={() => setOpenNewCardDialog(false)}
         listId={id}
       />
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>List Details</DialogTitle>
+        <DialogContent>
+          {/* You can put the content of your ListDetailPage here */}
+          <h1>List: {name}</h1>
+          <p>ID: {id}</p>
+          {/* ... other details */}
+        </DialogContent>
+      </Dialog>
       
     </>
     
