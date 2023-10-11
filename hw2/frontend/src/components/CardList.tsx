@@ -99,8 +99,16 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const handleDeleteSelected = () => {
     if (selected.length > 0) {
       // Perform the delete operation based on the selected IDs
-      console.log('Deleting: ', selected);
-    
+      console.log('確定是否刪除： ', selected);
+      try {
+        axios.delete('your-api-endpoint', { data: { ids: selected } });
+        console.log('Deleted successfully');
+
+        // Also update your song list accordingly if necessary
+        // This could be achieved by refetching the songs, or by filtering the deleted songs out of the state
+    } catch (error) {
+        console.error('Failed to delete songs', error);
+    }
       setSelected([]);
       setConfirmDialog(true);
       // Also update your song list accordingly
@@ -172,8 +180,8 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
 const updateData = async (id: string, updatedData: Partial<DataType>) => {
   console.log(`Updating data for id: ${id}, data:`, updatedData);
   try {
-    // Replace 'http://localhost:5173/list' with your actual base URL
-    const response = await axios.put("http://localhost:8000/api${id}", updatedData); 
+    // Replace 'http://localhost:8000/api' with your actual base URL
+    const response = await axios.put(`http://localhost:8000/api/${id}`, updatedData); 
     if (response.status === 200) {
       console.log('Data updated successfully');
     } else {
@@ -183,6 +191,7 @@ const updateData = async (id: string, updatedData: Partial<DataType>) => {
     console.error('Error during API call:', error);
   }
 };
+
 
 
 const handleUpdateField = async (
@@ -481,9 +490,15 @@ const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         </Table>
     </DialogContent>
     <DialogActions>
-        {/* <Button onClick={handleSelectAll} color="primary">Select All</Button> */}
-        <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
-        {/* <Button onClick={handleAddNewCard} color="primary">Add</Button> */}
+        
+        {/* <Button onClick={handleDeleteSelected} color="secondary">Delete</Button> */}
+        <Button
+            variant="contained"
+            onClick={() => handleDeleteSelected()}
+          >
+            <AddIcon className="mr-2" />
+            delete
+          </Button>
         <Button
             variant="contained"
             onClick={() => setOpenNewCardDialog(true)}
