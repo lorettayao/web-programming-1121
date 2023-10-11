@@ -98,6 +98,7 @@ export default function CardDialog(props: CardDialogProps) {
         await updateCard(props.cardId, {
           title: newTitle,
           description: newDescription,
+          youtubelink: newYoutubelink,
           list_id: newListId,
         });
       }

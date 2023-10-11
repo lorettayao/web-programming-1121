@@ -28,9 +28,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
 
 
 export type CardListProps = {
@@ -50,10 +52,7 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const [selectAll, setSelectAll] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-//   const [cardItems, setCardItems] = useState<CardProps[]>(initialCardItems); 
-//   const generateID = () => {
-//     return Math.random().toString(36).substr(2, 9);
-// };
+  const [cardItems, setCards] = useState<Card[]>([]);
 
 
 
@@ -172,6 +171,51 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
     setOpenDialog(true);  // Open the Dialog when the photo is clicked
   };
   
+  interface Card {
+    id: string;
+    title: string;
+    description: string;
+    youtubelink: string;
+    // add other fields as necessary
+}
+
+const handleEditFieldChange = (
+    cardId: string, 
+    field: keyof Card, 
+    value: string, 
+    currentCards: Card[], 
+    updateCards: React.Dispatch<React.SetStateAction<Card[]>>
+) => {
+    const updatedCards = currentCards.map(card => 
+        card.id === cardId ? {...card, [field]: value} : card
+    );
+    
+    updateCards(updatedCards);
+};
+
+const handleUpdateCard = async (
+    cardId: string, 
+    field: keyof Card, 
+    value: string, 
+    currentCards: Card[], 
+    updateCards: React.Dispatch<React.SetStateAction<Card[]>>
+) => {
+    try {
+        await axios.put(`/api/cards/${cardId}`, {[field]: value});
+        console.log('Card updated successfully');
+    } catch (error) {
+        console.error('There was an error updating the card!', error);
+
+        // Optional: revert state update if API call fails
+        const originalValue = currentCards.find(c => c.id === cardId)[field];
+        const revertedCards = currentCards.map(card => 
+            card.id === cardId ? {...card, [field]: originalValue} : card
+        );
+        
+        updateCards(revertedCards);
+    }
+};
+
 
   return ( 
     <>
@@ -277,21 +321,56 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
 
 {/* dialog for showing the list */}
 <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="md">
-        <DialogTitle>List Details</DialogTitle>
+        
         <DialogContent>
+          <h1>{name}</h1>
           <Table>
+          <TableHead>
+                <TableRow>
+                    <TableCell padding="checkbox"> {/* This is for the checkbox column header, leave it empty or add a label if needed */}
+                    </TableCell>
+                    <TableCell>Song</TableCell> {/* Updated this line */}
+                    <TableCell>Singer</TableCell> {/* Updated this line */}
+                    <TableCell>Link</TableCell> {/* Updated this line */}
+                </TableRow>
+            </TableHead>
             <TableBody>
               {cards.map(card => (
                 <TableRow key={card.id}>
-                  <TableCell padding="checkbox">
-                    <Checkbox 
-                      checked={selected.includes(card.id)}
-                      onChange={() => handleSelectOne(card.id)}
-                    />
-                  </TableCell>
-                  <TableCell>{card.title}</TableCell>
-                  <TableCell>{card.description}</TableCell>
-                  <TableCell><a href={card.youtubelink} target="_blank" rel="noopener noreferrer">YouTube</a></TableCell>
+                    <TableCell padding="checkbox">
+                        <Checkbox 
+                            checked={selected.includes(card.id)}
+                            onChange={() => handleSelectOne(card.id)}
+                        />
+                    </TableCell>
+                    <TableCell>
+                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'title', card.title, cardItems, setCards)}>
+                            <TextField
+                                value={card.title}
+                                onChange={(e) => handleEditFieldChange(card.id, 'title', e.target.value, cardItems, setCards)}
+                                fullWidth
+                            />
+                        </ClickAwayListener>
+                    </TableCell>
+                    <TableCell>
+                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'description', card.description, cardItems, setCards)}>
+                            <TextField
+                                value={card.description}
+                                onChange={(e) => handleEditFieldChange(card.id, 'description', e.target.value, cardItems, setCards)}
+                                fullWidth
+                            />
+                        </ClickAwayListener>
+                    </TableCell>
+                    <TableCell>
+                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'youtubelink', card.youtubelink, cardItems, setCards)}>
+                            <TextField
+                                value={card.youtubelink}
+                                onChange={(e) => handleEditFieldChange(card.id, 'youtubelink', e.target.value, cardItems, setCards)}
+                                fullWidth
+                            />
+                        </ClickAwayListener>
+                    </TableCell>
+
                 </TableRow>
               ))}
             </TableBody>

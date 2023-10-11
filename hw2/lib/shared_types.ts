@@ -37,7 +37,9 @@ export type CreateCardPayload = Omit<CardData, "id">&{
 
 export type CreateCardResponse = Pick<CardData, "id">;
 
-export type UpdateCardPayload = Partial<Omit<CardData, "id">>;
+export type UpdateCardPayload = Partial<Omit<CardData, "id">&{
+  youtubelink:string
+}>;
 
 export type UpdateCardResponse = "OK";
 

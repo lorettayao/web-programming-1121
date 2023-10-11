@@ -3,5 +3,19 @@
 
 npm install react-router-dom
 
-test
+# start frontend
+cd frontend
+yarn
+yarn dev
+
+# start backend
+cd backend
+yarn 
+yarndev
+
+# in the local host URL
+
+the main page shows: list, songs, number. When songs added, the number grows accordingly.
+
+click the photo, a dialog will show the detail, in which you can modify the songs.
 
