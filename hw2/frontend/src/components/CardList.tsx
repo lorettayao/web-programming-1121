@@ -381,13 +381,7 @@ const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
             <Card key={card.id} {...card} youtubelink={card.youtubelink} />
           ))}
           </div>
-          <Button
-            variant="contained"
-            onClick={() => setOpenNewCardDialog(true)}
-          >
-            <AddIcon className="mr-2" />
-            Add a song
-          </Button>
+          
         </div>
       </Paper>
       <CardDialog
@@ -489,7 +483,14 @@ const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     <DialogActions>
         {/* <Button onClick={handleSelectAll} color="primary">Select All</Button> */}
         <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
-        <Button onClick={handleAddNewCard} color="primary">Add</Button>
+        {/* <Button onClick={handleAddNewCard} color="primary">Add</Button> */}
+        <Button
+            variant="contained"
+            onClick={() => setOpenNewCardDialog(true)}
+          >
+            <AddIcon className="mr-2" />
+            Add a song
+          </Button>
     </DialogActions>
 </Dialog>   
   
