@@ -13,6 +13,8 @@ function App() {
   const { lists, fetchLists, fetchCards } = useCards();
   const [newListDialogOpen, setNewListDialogOpen] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [areCardsVisible, setAreCardsVisible] = useState(true);  // New state
+
 
   useEffect(() => {
     fetchLists();
@@ -45,7 +47,7 @@ function App() {
             </Button>
           </div>
         </div>
-        <div className="w-full flex flex-wrap gap-6 justify-start">
+        <div className="w-full flex flex-wrap gap-6 justify-start" >
           {lists.map((list) => (
             <CardList key={list.id} {...list} deleteMode={deleteMode} />
           ))}

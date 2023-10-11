@@ -376,15 +376,17 @@ const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
           <div className="text-center">
             {cards.length} {cards.length === 1 ? "card" : "songs"}
           </div>
+          <div style={{ visibility: 'hidden' }}>
           {cards.map((card) => (
             <Card key={card.id} {...card} youtubelink={card.youtubelink} />
           ))}
+          </div>
           <Button
             variant="contained"
             onClick={() => setOpenNewCardDialog(true)}
           >
             <AddIcon className="mr-2" />
-            Add a card
+            Add a song
           </Button>
         </div>
       </Paper>
