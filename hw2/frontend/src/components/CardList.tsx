@@ -96,31 +96,37 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   //     setSelectedCards([...selectedCards, cardId]);
   //   }
   // };
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
     if (selected.length > 0) {
-      // Perform the delete operation based on the selected IDs
-      console.log('確定是否刪除： ', selected);
       try {
-        axios.delete('your-api-endpoint', { data: { ids: selected } });
-        console.log('Deleted successfully');
-
-        // Also update your song list accordingly if necessary
-        // This could be achieved by refetching the songs, or by filtering the deleted songs out of the state
-    } catch (error) {
-        console.error('Failed to delete songs', error);
-    }
-      setSelected([]);
-      setConfirmDialog(true);
-      // Also update your song list accordingly
-    }
-    else {
+        // Perform the delete operation based on the selected IDs
+        console.log('確定是否刪除： ', selected);
+  
+        // Make sure to replace 'your-api-endpoint' with the actual endpoint.
+        const response = await axios.delete('your-api-endpoint', { data: { ids: selected } });
+  
+        if (response.status === 200) {
+          console.log('Cards deleted successfully');
+        } else {
+          console.error('Failed to delete cards:', response);
+        }
+  
+        setSelected([]);
+        setConfirmDialog(true);
+      } catch (error) {
+        console.error('Failed to delete cards', error);
+        alert('Failed to delete cards');  // Showing error alert
+      }
+    } else {
       // No songs selected, show an alert
-      alert('請選擇要刪除的歌曲'); // replace this with a more user-friendly UI alert
+      alert('請選擇要刪除的歌曲'); // Replace this with a more user-friendly UI alert
     }
   };
+  
   const handleAddNewCard = () => {
     setOpenNewCardDialog(true);
-};
+  };
+  
 
 
   const handleConfirmDelete = () => {

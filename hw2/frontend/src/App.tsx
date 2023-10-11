@@ -13,7 +13,7 @@ function App() {
   const { lists, fetchLists, fetchCards } = useCards();
   const [newListDialogOpen, setNewListDialogOpen] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
-  const [areCardsVisible, setAreCardsVisible] = useState(true);  // New state
+  // const [areCardsVisible, setAreCardsVisible] = useState(true);  // New state
 
 
   useEffect(() => {
