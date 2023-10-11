@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-// import { Link } from 'react-router-dom';
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -21,8 +20,6 @@ import { useEffect } from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-// import { describe } from "node:test";
-// import { Description } from "@mui/icons-material";
 import Checkbox from '@mui/material/Checkbox';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -44,6 +41,13 @@ export type CardListProps = {
 
 };
 
+type DataType = {
+  title: string;
+  description: string;
+  youtubelink: string;
+  // Add other fields as needed
+};
+
 export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardListProps & { deleteMode: boolean }) {
   const [openNewCardDialog, setOpenNewCardDialog] = useState(false);
   const [edittingName, setEdittingName] = useState(false);
@@ -53,7 +57,21 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [cardItems, setCards] = useState<Card[]>([]);
+  const [editingName, setEditingName] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [editingPhoto, setEditingPhoto] = useState(false);
+  const [editingCards, setEditingCards] = useState(false);
+  const [title, setTitle] = useState<{ [key: string]: string }>({});
+  const [description, setDescription] = useState<{ [key: string]: string }>({});
+  const [youtubelink, setYoutubeLink] = useState<{ [key: string]: string }>({});
+  
 
+  const {fetchCards, fetchLists } = useCards();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRefDes = useRef<HTMLInputElement>(null);
+  const openLinkInNewTab = (url:string) => {
+  window.open(url, '_blank');
+  };
 
 
   const handleSelectAll = () => {
@@ -95,17 +113,6 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const handleAddNewCard = () => {
     setOpenNewCardDialog(true);
 };
-// const handleNewCardSubmit = (title: string, description: string, youtubelink: string) => {
-//   const newCard = { 
-//       id: generateID(), 
-//       title, 
-//       description, 
-//       youtubelink  // Ensure your CardProps type definition includes youtubeLink property
-//   };
-
-//   setCardItems(prevCardItems => [...prevCardItems, newCard]);
-//   setOpenNewCardDialog(false);  // Assuming this state controls the visibility of your dialog
-// };
 
 
   const handleConfirmDelete = () => {
@@ -116,8 +123,7 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   };
 
 
-  const { fetchLists } = useCards();
-  const inputRef = useRef<HTMLInputElement>(null);
+  // const { fetchLists } = useCards();
 
   
 
@@ -158,6 +164,71 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
     setEdittingName(false);
   };
 
+  const [data, setData] = useState<DataType>({
+    title: '',
+    description: '',
+    youtubelink: ''
+});
+const updateData = async (id: string, updatedData: Partial<DataType>) => {
+  try {
+      const response = await axios.put(`your-api-endpoint/${id}`, updatedData);
+      if (response.status === 200) {
+          console.log('Data updated successfully');
+      } else {
+          console.error('Failed to update data:', response);
+      }
+  } catch (error) {
+      console.error('Error during API call:', error);
+  }
+};
+
+const handleUpdateField = async (
+  id: string, 
+  field: keyof DataType, 
+  value: string
+) => {
+  if (value && value.trim() === "") {
+      alert(`Error: ${field.charAt(0).toUpperCase() + field.slice(1)} cannot be empty`);
+      return;
+  }
+
+  try {
+      await updateData(id, { [field]: value });
+      fetchData();
+
+      
+  } catch (error) {
+      alert(`Error: Failed to update ${field}`);
+  }
+};
+
+
+const fetchData = () => {
+  // Implement the logic to fetch updated data from the backend
+  console.log('Fetching updated data');
+};
+
+useEffect(() => {
+  if (openDialog) {
+      // Populate initial state when dialog opens
+      const initialTitle: { [key: string]: string } = {};
+      const initialDescription: { [key: string]: string } = {};
+      const initialYoutubeLink: { [key: string]: string } = {};
+
+      cards.forEach(card => {
+          initialTitle[card.id] = card.title;
+          initialDescription[card.id] = card.description;
+          initialYoutubeLink[card.id] = card.youtubelink;
+      });
+
+      setTitle(initialTitle);
+      setDescription(initialDescription);
+      setYoutubeLink(initialYoutubeLink);
+  }
+}, [openDialog, cards]);
+
+
+
   const handleDelete = async () => {
     try {
       await deleteList(id);
@@ -194,27 +265,49 @@ const handleEditFieldChange = (
 };
 
 const handleUpdateCard = async (
-    cardId: string, 
-    field: keyof Card, 
-    value: string, 
-    currentCards: Card[], 
-    updateCards: React.Dispatch<React.SetStateAction<Card[]>>
+  cardId: string, 
+  field: keyof Card, 
+  value: string, 
+  currentCards: Card[], 
+  updateCards: React.Dispatch<React.SetStateAction<Card[]>>
 ) => {
-    try {
-        await axios.put(`/api/cards/${cardId}`, {[field]: value});
-        console.log('Card updated successfully');
-    } catch (error) {
-        console.error('There was an error updating the card!', error);
+  try {
+      const response = await fetch(`/api/cards/${cardId}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({[field]: value}),
+      });
 
-        // Optional: revert state update if API call fails
-        const originalValue = currentCards.find(c => c.id === cardId)[field];
-        const revertedCards = currentCards.map(card => 
-            card.id === cardId ? {...card, [field]: originalValue} : card
-        );
-        
-        updateCards(revertedCards);
-    }
+      if (!response.ok) {
+        console.log("ID???",cardId);
+          throw new Error(`Failed to update the card: ${response.statusText}`);
+
+      }
+
+      const updatedCards = currentCards.map(card =>
+          card.id === cardId ? {...card, [field]: value} : card
+      );
+      updateCards(updatedCards);
+
+      console.log('Card updated successfully');
+  } catch (error) {
+      console.error('There was an error updating the card!', error);
+  }
 };
+const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (event.target.checked) {
+      const newSelecteds = cards.map((card) => card.id);
+      setSelected(newSelecteds);
+      setSelectAll(true);
+      return;
+  }
+  setSelected([]);
+  setSelectAll(false);
+};
+
+
 
 
   return ( 
@@ -321,67 +414,80 @@ const handleUpdateCard = async (
 
 {/* dialog for showing the list */}
 <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="md">
-        
-        <DialogContent>
-          <h1>{name}</h1>
-          <Table>
-          <TableHead>
+    <DialogContent>
+        <h1>{name}</h1>
+        <Table>
+            <TableHead>
                 <TableRow>
-                    <TableCell padding="checkbox"> {/* This is for the checkbox column header, leave it empty or add a label if needed */}
+                    <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={selected.length > 0 && selected.length < cards.length}
+                      checked={cards.length > 0 && selected.length === cards.length}
+                      onChange={handleSelectAllClick}
+                      inputProps={{ 'aria-label': 'select all' }}
+                    />
                     </TableCell>
-                    <TableCell>Song</TableCell> {/* Updated this line */}
-                    <TableCell>Singer</TableCell> {/* Updated this line */}
-                    <TableCell>Link</TableCell> {/* Updated this line */}
+                    <TableCell>Song</TableCell>
+                    <TableCell>Singer</TableCell>
+                    <TableCell>Link</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-              {cards.map(card => (
-                <TableRow key={card.id}>
-                    <TableCell padding="checkbox">
-                        <Checkbox 
-                            checked={selected.includes(card.id)}
-                            onChange={() => handleSelectOne(card.id)}
-                        />
-                    </TableCell>
-                    <TableCell>
-                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'title', card.title, cardItems, setCards)}>
-                            <TextField
-                                value={card.title}
-                                onChange={(e) => handleEditFieldChange(card.id, 'title', e.target.value, cardItems, setCards)}
-                                fullWidth
+                {cards.map(card => (
+                    <TableRow key={card.id}>
+                        <TableCell padding="checkbox">
+                            <Checkbox 
+                                checked={selected.includes(card.id)}
+                                onChange={() => handleSelectOne(card.id)}
                             />
-                        </ClickAwayListener>
-                    </TableCell>
-                    <TableCell>
-                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'description', card.description, cardItems, setCards)}>
-                            <TextField
-                                value={card.description}
-                                onChange={(e) => handleEditFieldChange(card.id, 'description', e.target.value, cardItems, setCards)}
-                                fullWidth
-                            />
-                        </ClickAwayListener>
-                    </TableCell>
-                    <TableCell>
-                        <ClickAwayListener onClickAway={() => handleUpdateCard(card.id, 'youtubelink', card.youtubelink, cardItems, setCards)}>
-                            <TextField
-                                value={card.youtubelink}
-                                onChange={(e) => handleEditFieldChange(card.id, 'youtubelink', e.target.value, cardItems, setCards)}
-                                fullWidth
-                            />
-                        </ClickAwayListener>
-                    </TableCell>
-
-                </TableRow>
-              ))}
+                        </TableCell>
+                        <TableCell>
+                            <ClickAwayListener 
+                                onClickAway={() => handleUpdateField(card.id, 'title', title[card.id])}
+                            >
+<TextField
+    value={title[card.id] || card.title}  // Ensure it falls back to card.title if title[card.id] is undefined
+    onChange={(e) => setTitle(prev => ({ ...prev, [card.id]: e.target.value }))}
+    fullWidth
+/>
+                            </ClickAwayListener>
+                        </TableCell>
+                        <TableCell>
+                            <ClickAwayListener 
+                                onClickAway={() => handleUpdateField(card.id,'description', description[card.id] || card.description)}
+                            >
+                                <TextField
+            value={description[card.id] || card.description}
+            onChange={(e) => setDescription(prev => ({ ...prev, [card.id]: e.target.value }))}
+            fullWidth
+        />
+                            </ClickAwayListener>
+                        </TableCell>
+                        <TableCell>
+                            <ClickAwayListener 
+                                onClickAway={() => handleUpdateField(card.id,'youtubelink', youtubelink[card.id] || card.youtubelink)}
+                            >
+                                <a href={youtubelink[card.id] || card.youtubelink} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
+            <TextField
+                value={youtubelink[card.youtubelink] || card.youtubelink}
+                onChange={(e) => setYoutubeLink(prev => ({ ...prev, [card.id]: e.target.value }))}
+                fullWidth
+            />
+        </a>
+                            </ClickAwayListener>
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
-          </Table>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSelectAll} color="primary">Select All</Button>
-          <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
-          <Button onClick={handleAddNewCard} color="primary">Add</Button> {/* **ADD THIS BUTTON** */}
-        </DialogActions>
-      </Dialog>   
+        </Table>
+    </DialogContent>
+    <DialogActions>
+        {/* <Button onClick={handleSelectAll} color="primary">Select All</Button> */}
+        <Button onClick={handleDeleteSelected} color="secondary">Delete</Button>
+        <Button onClick={handleAddNewCard} color="primary">Add</Button>
+    </DialogActions>
+</Dialog>   
+  
     </>
     
   );

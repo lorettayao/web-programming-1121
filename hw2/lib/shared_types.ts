@@ -14,6 +14,7 @@ export type CardData = {
   title: string;
   description: string;
   list_id: string;
+  youtubelink:string;
 };
 
 export type ListData = {
