@@ -19,3 +19,7 @@ the main page shows: list, songs, number. When songs added, the number grows acc
 
 click the photo, a dialog will show the detail, in which you can modify the songs.
 
+# notification
+when trying to delete the list. the server is running very slow, or even crash.
+please restart the page, and you will see the card being deleted.
+

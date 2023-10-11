@@ -56,11 +56,11 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
   const [selectAll, setSelectAll] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const [cardItems, setCards] = useState<Card[]>([]);
-  const [editingName, setEditingName] = useState(false);
-  const [editingDescription, setEditingDescription] = useState(false);
-  const [editingPhoto, setEditingPhoto] = useState(false);
-  const [editingCards, setEditingCards] = useState(false);
+  // const [cardItems, setCards] = useState<Card[]>([]);
+  // const [editingName, setEditingName] = useState(false);
+  // const [editingDescription, setEditingDescription] = useState(false);
+  // const [editingPhoto, setEditingPhoto] = useState(false);
+  // const [editingCards, setEditingCards] = useState(false);
   const [title, setTitle] = useState<{ [key: string]: string }>({});
   const [description, setDescription] = useState<{ [key: string]: string }>({});
   const [youtubelink, setYoutubeLink] = useState<{ [key: string]: string }>({});
@@ -170,17 +170,20 @@ export default function CardList({ id, name, cards, photoUrl,deleteMode }: CardL
     youtubelink: ''
 });
 const updateData = async (id: string, updatedData: Partial<DataType>) => {
+  console.log(`Updating data for id: ${id}, data:`, updatedData);
   try {
-      const response = await axios.put(`your-api-endpoint/${id}`, updatedData);
-      if (response.status === 200) {
-          console.log('Data updated successfully');
-      } else {
-          console.error('Failed to update data:', response);
-      }
+    // Replace 'http://localhost:5173/list' with your actual base URL
+    const response = await axios.put("http://localhost:8000/api${id}", updatedData); 
+    if (response.status === 200) {
+      console.log('Data updated successfully');
+    } else {
+      console.error('Failed to update data:', response);
+    }
   } catch (error) {
-      console.error('Error during API call:', error);
+    console.error('Error during API call:', error);
   }
 };
+
 
 const handleUpdateField = async (
   id: string, 
