@@ -10,11 +10,17 @@ const View = (): React.ReactNode => {
 
   /* (1/3) TODO 2.2: Navigation with `ViewFooter` Buttons (8%) */
   /* Hint 2.2.1: Link page index to React state */
+  const { numPosts } = usePost(); // Use numPosts from PostContext
+
   const handleNextClick = useCallback(() => {
-    setSelectedIndex(prevIndex => prevIndex + 1);
-  }, []);
+    setSelectedIndex((prevIndex) => (prevIndex + 1) % numPosts);
+  }, [numPosts]);
+  
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const post = getPostByIndex(0);
+  const post = getPostByIndex(selectedIndex);
+  const handlePrevClick = useCallback(() => {
+    setSelectedIndex((prevIndex) => (prevIndex - 1 + numPosts) % numPosts);
+  }, [numPosts]);
   /* End (1/3) TODO 2.2 */
 
   /* (3/3) TODO 2.2: Navigation with `ViewFooter` Buttons (8%) */
@@ -22,9 +28,7 @@ const View = (): React.ReactNode => {
   /* Hint 2.2.5: Refer to `PostContext` for more clue */
   // const handleNextClick = useCallback(() => {}, []);
   // const handlePrevClick = useCallback(() => {}, []);
-  const handlePrevClick = useCallback(() => {
-    if (selectedIndex > 0) setSelectedIndex(prevIndex => prevIndex - 1);
-  }, [selectedIndex]);
+  
   /* End (3/3) TODO 2.2 */
 
   /* (1/3) TODO 2.4: Handle Voting for Unvoted Posts (8%) */
@@ -41,24 +45,14 @@ const View = (): React.ReactNode => {
   /* (2/3) TODO 2.4: Handle Voting for Unvoted Posts (8%) */
   const handleVoteClick = (vote: 'upvote' | 'downvote') => {
     if (post === null || user === null) return;
-    /* Hint 2.4.3: Call some exported function from `PostContext` */
-    // votePost(post.id, vote);
-    
-
+  
     if (vote === 'upvote' && !hasUpvoted) {
-        if (hasDownvoted) {
-            votePost(selectedIndex, user._id, 'upvote'); 
-        } else {
-            votePost(selectedIndex, user._id, 'downvote'); 
-        }
+      votePost(selectedIndex, user._id, 'upvote');
     } else if (vote === 'downvote' && !hasDownvoted) {
-        if (hasUpvoted) {
-            votePost(selectedIndex, user._id, 'downvote');
-        } else {
-            votePost(selectedIndex, user._id, 'upvote');
-        }
+      votePost(selectedIndex, user._id, 'downvote');
     }
   };
+  
   /* End of (2/3) TODO 2.4 */
 
   /* TODO 2.3: Navigation with Keyboard (5%) */
@@ -74,7 +68,7 @@ const View = (): React.ReactNode => {
       }
     };
     /* Hint 2: Add `handleKeyPress` function as event listener to keyboard input event */
-    window.addEventListener('', () => {});
+    window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleNextClick, handlePrevClick]);
     /* Hint 3: Update the dependency array of `useEffect` hook */
