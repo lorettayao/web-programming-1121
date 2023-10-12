@@ -32,7 +32,15 @@ export const createUser = asyncWrapper(
     /* TODO 1.5: Ensure User Registration Functions Properly (8%) */
     /* Create new user using `UserModel` */
     /* Return 201 with new user */
-    throw new Error('`createUser` Not Implemented');
+    // throw new Error('`createUser` Not Implemented');
+    try {
+      const user = new UserModel(req.body);
+      await user.save();
+      res.status(201).json(user);
+    } catch (error) {
+      // Add error handling as per your requirement, for example:
+      res.status(500).send({ message: 'Error creating user', error }as any);
+    }
     /* End of TODO 1.5 */
   },
 );
@@ -64,7 +72,19 @@ export const updateUser = asyncWrapper(
     /* TODO 4.4: Update User Information (6%) */
     /* Return 200 with updated user */
     /* Return 404 with "User not found" if update fails */
-    throw new Error('`updateUser` Not Implemented');
+    // throw new Error('`updateUser` Not Implemented');
+    try {
+      const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      
+      if (!user) {
+        return res.status(404).send({ message: 'User not found' });
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      // Casting error to any to bypass the type checking error
+      res.status(500).send({ message: 'Error updating user', error } as any);
+    }
     /* End of TODO 5.4 */
   },
 );

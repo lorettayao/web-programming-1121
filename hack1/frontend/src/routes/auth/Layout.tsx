@@ -40,6 +40,7 @@ const AuthLayout = () => {
     /* What happens if we don't prevent the default behavior? */
     if (location.pathname === '/login') {
       login(username, password);
+      // login('hi', '123');
       /* Replace the above line with the following line if you want to test other TODOs in this hackathon. */
       // login('test', '123');
       /* Warning: Remember to change it back if you want to test the login functionality. */
@@ -51,7 +52,11 @@ const AuthLayout = () => {
       /* Here, a toast is a small, non-blocking notification pop-up. */
       /* They can be created via the `toast` function provided by `useToast()` */
       /* Reference: https://ui.shadcn.com/docs/components/toast#usage */
-
+        if (password !== confirmPassword) {
+          toast({ description: "Passwords do not match" });
+          return;
+        }
+        register(username, password);
       /* End of TODO 1.5 */
       register(username, password);
     }
@@ -70,6 +75,7 @@ const AuthLayout = () => {
               /* Each `NavLink` should use `title` as its content. */
               /* Reference: https://reactrouter.com/en/main/components/nav-link */
               /*            https://ui.shadcn.com/docs/components/tabs#usage */
+
               <TabsTrigger
                 asChild
                 key={tab.title}
@@ -77,7 +83,7 @@ const AuthLayout = () => {
                 className="last-of-type:border-r-0"
                 data-testid={`tab-${tab.path}`}
               >
-                <NavLink to="" />
+                <NavLink to={tab.path}>{tab.title}</NavLink>
               </TabsTrigger>
               /* End of TODO 1.3 */
             ))}
@@ -90,8 +96,14 @@ const AuthLayout = () => {
             {/* The logo should be vscoddit.svg in the public folder. */}
             {/* The logo should have alt text "VSCoddit Logo". */}
             {/* The title should be "VSCoddit" */}
-            <img data-testid="header-logo" className="h-5 w-5 brightness-200" />
-            <span data-testid="header-title" />
+            <img 
+              src="/vscoddit.svg" 
+              alt="VSCoddit Logo" 
+              data-testid="header-logo" 
+              className="h-5 w-5 brightness-200" 
+            />
+            <span data-testid="header-title">VSCoddit</span>
+            
             {/* END of TODO 1.1 */}
           </CardTitle>
           <CardDescription>
@@ -111,10 +123,14 @@ const AuthLayout = () => {
               {/* It should be required. */}
               <Input
                 id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 data-testid="input-username"
                 type="text"
                 name="username"
                 autoComplete="username"
+                placeholder="Enter Username"
+                required
               />
               {/* End of TODO 1.4 */}
             </div>
@@ -127,10 +143,14 @@ const AuthLayout = () => {
               {/* It should be required. */}
               <Input
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 data-testid="input-password"
                 type="password"
                 name="password"
                 autoComplete="current-password"
+                placeholder="Enter Password"
+                required
               />
               {/* End of TODO 1.4 */}
             </div>
@@ -149,10 +169,14 @@ const AuthLayout = () => {
               {/* It should be required only if in the register page. */}
               <Input
                 id="confirm-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 data-testid="input-confirm-password"
                 type="password"
                 name="confirm-password"
                 autoComplete="new-password"
+                placeholder="Confirm Password"
+                required={location.pathname === '/register'}
               />
               {/* End of TODO 1.5 */}
             </div>

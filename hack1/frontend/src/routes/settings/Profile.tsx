@@ -20,16 +20,17 @@ import { useUser } from '@/contexts/UserContext';
 /* TODO 4.2: Render User Information - gender (8%) */
 /* Create props `gender` for the `GenderItem` component */
 /* What type should it be? (Hint: You can find it in this file) */
-const GenderItem = (/* Implement me */) => {
+const GenderItem = ({ gender }: { gender: NonNullable<User['sex']> }) => {
   return (
     <FormItem className="flex items-center space-x-3 space-y-0">
       <FormControl>
-        <RadioGroupItem value="Replace me" />
+        <RadioGroupItem value={gender} />
       </FormControl>
-      <FormLabel className="font-normal">Replace me</FormLabel>
+      <FormLabel className="font-normal">{gender}</FormLabel>
     </FormItem>
   );
 };
+
 /* End of TODO 4.2 */
 
 const Profile = (): React.ReactNode => {
@@ -79,12 +80,30 @@ const Profile = (): React.ReactNode => {
             )}
           />
           {/* TODO 4.1: Render User Information - bio (4%) */}
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    data-testid="textarea-bio"
+                    placeholder="Tell us a little bit about yourself"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* You can use the `username` field as a reference */}
           {/* It should have a label of "Bio" */}
           {/* You should use a `Textarea` component */}
           {/* It should have a placeholder of "Tell us a little bit about yourself" */}
           {/* It is not required */}
-          <p className="text-destructive">Replace me</p>
+          {/* <p className="text-destructive">Replace me</p> */}
           {/* End of TODO 5.1 */}
           <FormField
             control={form.control}
@@ -99,10 +118,14 @@ const Profile = (): React.ReactNode => {
                     className="flex flex-col space-y-1"
                   >
                     {/* TODO 4.2: Render User Information - gender (8%) */}
+                    {genders.map((gender) => (
+                      <GenderItem key={gender} gender={gender} />
+                    ))}
+
                     {/* Use `genders` array to render the radio group items */}
                     {/* Use the `GenderItem` component to render each item */}
                     {/* Send the `gender` as a prop to the `GenderItem` component */}
-                    <p className="text-destructive">Replace me</p>
+                    {/* <p className="text-destructive">Replace me</p> */}
                     {/* End of TODO 5.2 */}
                   </RadioGroup>
                 </FormControl>
@@ -128,14 +151,31 @@ const Profile = (): React.ReactNode => {
                   {/* Otherwise, if the user has a profile picture, render it (with `alt` attribute "Profile Picture") */}
                   {/* ↑ This will not be tested in TODO 4.3 ↑ */}
                   {/* Otherwise, render text "Upload a picture" */}
-                  <img
+                  {/* <img
                     src="Replace me"
                     alt="Replace me"
                     data-testid="label-profile-picture"
                     className="h-full w-full rounded-md object-cover"
-                  />
+                  /> */}
                   <span data-testid="label-upload">Upload a picture</span>
                   {/* End of TODO 5.3 */}
+                  {form.watch('image') ? (
+                      <img
+                        src={form.watch('image')}
+                        alt="Uploaded Profile Picture"
+                        data-testid="label-profile-picture"
+                        className="h-full w-full rounded-md object-cover"
+                      />
+                    ) : user?.image ? (
+                      <img
+                        src={user.image}
+                        alt="Profile Picture"
+                        data-testid="label-profile-picture"
+                        className="h-full w-full rounded-md object-cover"
+                      />
+                    ) : (
+                      <span data-testid="label-upload">Upload a picture</span>
+                    )}
                   {/* End of TODO 5.5 */}
                 </FormLabel>
                 <FormControl>

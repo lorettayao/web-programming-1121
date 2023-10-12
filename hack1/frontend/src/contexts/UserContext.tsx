@@ -9,6 +9,7 @@ import type { User } from '@shared/types';
 import { AxiosError } from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import { UserService } from '@/services/userService';
+import { useEffect } from 'react';  
 
 type UserContextType = {
   user: User | null;
@@ -41,6 +42,11 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
 
   /* Reminder: Don't import this useEffect hook if you are tired of being redirected to the login page. */
   /* Warning: But remember to add it back before submitting your work. */
+  useEffect(() => {
+    if (!authenticated && location.pathname !== '/login' && location.pathname !== '/register') {
+      navigate('/login');
+    }
+  }, [authenticated, location, navigate]);
   /* End of TODO 1.2 */
 
   const login = async (username: string, password: string) => {

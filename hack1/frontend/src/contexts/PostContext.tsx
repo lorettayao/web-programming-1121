@@ -63,11 +63,22 @@ export const PostsProvider = ({ children }: PropsWithChildren) => {
     );
   };
 
-  /* TODO 3.3: Edit User Posts With Editor (8%) */
+  /* 3: Edit User Posts With Editor (8%) */
   const updatePost = async (index: number, title: string, content: string) => {
     if (posts === null) return;
     /* Hint 3.3.1: Use the correct API from `PostService` to update DB */
+    const updatedData = { 
+      title, 
+      content, 
+      author: posts[index].author._id  // Adding the author property
+    };
+  
+    await PostService.update(posts[index]._id, updatedData);
+
     /* Hint 3.3.2: Use React hook to update frontend */
+    const updatedPosts = [...posts];
+  updatedPosts[index] = { ...updatedPosts[index], title, content };
+  setPosts(updatedPosts);
   };
   /* END TODO 3.3 */
 
