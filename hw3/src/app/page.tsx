@@ -1,3 +1,4 @@
+// "use client";
 import { eq, desc, isNull, sql } from "drizzle-orm";
 
 import NameDialog from "@/components/NameDialog";
@@ -6,6 +7,11 @@ import TweetInput from "@/components/TweetInput";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
 import { likesTable, tweetsTable, usersTable } from "@/db/schema";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+// import { cn, validateHandle, validateUsername } from "@/lib/utils";
+// import { useSearchParams } from "next/navigation";
+// import { useEffect, useRef, useState } from "react";
 
 type HomePageProps = {
   searchParams: {
@@ -14,6 +20,9 @@ type HomePageProps = {
   };
 };
 
+// const searchParams = useSearchParams();
+// const usernameInputRef = useRef<HTMLInputElement>(null);
+// const [usernameError, setUsernameError] = useState(false);
 // Since this is a server component, we can do some server side processing
 // in the react component. This may seem crazy at first, but it's actually
 // a very powerful feature. It allows us to do the data fetching and rendering
@@ -133,11 +142,15 @@ export default async function Home({
     .leftJoin(likesSubquery, eq(tweetsTable.id, likesSubquery.tweetId))
     .leftJoin(likedSubquery, eq(tweetsTable.id, likedSubquery.tweetId))
     .execute();
-
+  
   return (
     <>
       <div className="flex h-screen w-full max-w-2xl flex-col overflow-scroll pt-2">
-        <h1 className="mb-2 bg-white px-4 text-xl font-bold">Home</h1>
+        <h1 className="mb-2 bg-white px-4 text-xl font-bold">揪團</h1>
+        <div>
+          {/* add name here */}
+          
+        </div>
         <div className="w-full px-4 pt-3">
           <TweetInput />
         </div>
