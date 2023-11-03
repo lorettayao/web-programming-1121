@@ -41,7 +41,7 @@ export default function Tweet({
           pathname: `/tweet/${id}`,
           query: {
             username,
-            handle,
+            
           },
         }}
       >

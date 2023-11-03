@@ -1,6 +1,9 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useState, useRef } from 'react';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Bell,
   Bookmark,
@@ -15,30 +18,69 @@ import {
 
 import larry from "@/assets/larry.png";
 import { cn } from "@/lib/utils";
-
 import ProfileButton from "./ProfileButton";
 
 export default function Header() {
-  return (
-    // aside is a semantic html tag for side content
-    <aside className="flex h-screen flex-col justify-between px-6 py-6">
-      <div className="flex flex-col gap-2">
-        <div className="p-2">
-          <Link href="/">
-            <Image src={larry} alt="Larry the bird" width={40} height={40} />
-          </Link>
-        </div>
-        <HeaderButton Icon={Home} text="Home" active />
-        <HeaderButton Icon={Search} text="Explore" />
-        <HeaderButton Icon={Bell} text="Notifications" />
-        <HeaderButton Icon={Mail} text="Messages" />
-        <HeaderButton Icon={FileText} text="Lists" />
-        <HeaderButton Icon={Bookmark} text="Bookmarks" />
-        <HeaderButton Icon={Users} text="Communities" />
-        <HeaderButton Icon={User} text="Profile" />
-        <HeaderButton Icon={MoreHorizontal} text="More" />
+  const [usernames, setUsernames] = useState<string[]>([]); // Stores the list of usernames
+  const [currentUsername, setCurrentUsername] = useState(''); // Stores the currently selected username
+  const [usernameError, setUsernameError] = useState(false);
+
+
+  // Ref hooks from NameDialog component
+  const usernameInputRef = useRef<HTMLInputElement>(null);
+  const saveUsername = () => {
+    const username = usernameInputRef.current?.value;
+    if (username && !usernames.includes(username)) {
+      setUsernames([...usernames, username]);
+      setCurrentUsername(username); // Optionally set the new name as the current user
+    }
+  };
+  const switchUser = (username: string) => {
+    setCurrentUsername(username);
+  };
+  const renderSavedUsernames = () => {
+    return usernames.map((username, index) => (
+      <div key={index} onClick={() => switchUser(username)} className="cursor-pointer hover:bg-gray-200 p-2">
+        {username}
       </div>
-      <ProfileButton />
+    ));
+  };
+  
+  return (
+    <aside className="flex h-screen flex-col justify-between px-6 py-6">
+      {/* ... other links and buttons */}
+      <div>
+        <ProfileButton />
+        {/* Name input section */}
+        <div className="mt-4">
+          <div className="flex items-center">
+            <Label>Name:</Label>
+            <Input
+              ref={usernameInputRef}
+              className="ml-2"
+              defaultValue={currentUsername || ''}
+              placeholder="Your Name"
+              onBlur={saveUsername} // Optionally save when the input loses focus
+            />
+          </div>
+          <button onClick={saveUsername} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Save Name
+          </button>
+          {/* Display list of saved usernames */}
+          <div className="mt-2">
+            <button onClick={() => setUsernameError(!usernameError)} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+              {usernameError ? 'Hide Usernames' : 'Show Usernames'}
+            </button>
+            {usernameError && renderSavedUsernames()}
+          </div>
+          {/* Error message if needed */}
+          {(usernameError) && (
+            <p className="text-red-500 text-xs mt-2">
+              Please enter a valid name and handle.
+            </p>
+          )}
+        </div>
+      </div>
     </aside>
   );
 }
