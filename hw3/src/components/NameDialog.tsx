@@ -93,59 +93,48 @@ export default function NameDialog() {
   };
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Welcome to Twitter!</DialogTitle>
-          <DialogDescription>
-            Tell us your name to start tweeting.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              placeholder="Web Programming"
-              defaultValue={searchParams.get("username") ?? ""}
-              className={cn(usernameError && "border-red-500", "col-span-3")}
-              ref={usernameInputRef}
-            />
-            {usernameError && (
-              <p className="col-span-3 col-start-2 text-xs text-red-500">
-                Invalid username, use only{" "}
-                <span className="font-mono">[a-z0-9 ]</span>, must be between 1
-                and 50 characters long.
-              </p>
-            )}
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Handle
-            </Label>
-            <div className="col-span-3 flex items-center gap-2">
-              <span>@</span>
-              <Input
-                placeholder="web.prog"
-                defaultValue={searchParams.get("handle") ?? ""}
-                className={cn(handleError && "border-red-500")}
-                ref={handleInputRef}
-              />
-            </div>
-            {handleError && (
-              <p className="col-span-3 col-start-2 text-xs text-red-500">
-                Invalid handle, use only{" "}
-                <span className="font-mono">[a-z0-9\._-]</span>, must be between
-                1 and 25 characters long.
-              </p>
-            )}
-          </div>
+    <div className="p-4">
+      <form onSubmit={(event) => {
+        event.preventDefault();
+        handleSave();
+      }}>
+        <div className="mb-4">
+          <Label htmlFor="username">使用者名稱</Label>
+          <Input
+            id="username"
+            placeholder="Web Programming"
+            defaultValue={searchParams.get("username") ?? ""}
+            className={cn(usernameError && "border-red-500")}
+            ref={usernameInputRef}
+          />
+          {usernameError && (
+            <p className="text-xs text-red-500">
+              Invalid username, use only [a-z0-9 ], must be between 1 and 50 characters long.
+            </p>
+          )}
         </div>
-        <DialogFooter>
-          <Button onClick={handleSave}>start</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div className="mb-4" style={{ display: 'none' }}>
+          <Label htmlFor="handle">Handle</Label>
+          <div className="flex items-center gap-2">
+            <span>@</span>
+            <Input
+              id="handle"
+              placeholder="web.prog"
+              defaultValue={"chen"}
+              className={cn(handleError && "border-red-500")}
+              ref={handleInputRef}
+              
+            />
+          </div>
+          
+          {handleError && (
+            <p className="text-xs text-red-500">
+              Invalid handle, use only [a-z0-9._-], must be between 1 and 25 characters long.
+            </p>
+          )}
+        </div>
+        <Button type="submit">Save</Button>
+      </form>
+    </div>
   );
 }

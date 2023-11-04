@@ -52,22 +52,21 @@ export default function LikeButton({
 
   return (
     <button
+    className={cn(
+      "flex w-16 items-center justify-center gap-1 hover:text-brand",
+      liked && "text-brand",
+    )}
+    onClick={handleClick}
+    disabled={loading}
+  >
+    <div
       className={cn(
-        "flex w-16 items-center gap-1 hover:text-brand",
-        liked && "text-brand",
+        "flex items-center justify-center gap-1 rounded p-1.5 transition-colors duration-300 hover:bg-brand/10",
+        liked && "bg-brand/10",
       )}
-      onClick={handleClick}
-      disabled={loading}
     >
-      <div
-        className={cn(
-          "flex items-center gap-1 rounded-full p-1.5 transition-colors duration-300 hover:bg-brand/10",
-          liked && "bg-brand/10",
-        )}
-      >
-        <Heart size={18} />
-      </div>
-      {likesCount > 0 && likesCount}
-    </button>
+      {likesCount > 0 ? `${likesCount}+ joined` : 'Join'}
+    </div>
+  </button>
   );
 }

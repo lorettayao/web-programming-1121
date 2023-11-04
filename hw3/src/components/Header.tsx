@@ -52,35 +52,7 @@ export default function Header() {
       <div>
         <ProfileButton />
         {/* Name input section */}
-        <div className="mt-4">
-          <div className="flex items-center">
-            <Label>Name:</Label>
-            <Input
-              ref={usernameInputRef}
-              className="ml-2"
-              defaultValue={currentUsername || ''}
-              placeholder="Your Name"
-              onBlur={saveUsername} // Optionally save when the input loses focus
-            />
-          </div>
-          <button onClick={saveUsername} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-            Save Name
-          </button>
-          {/* Display list of saved usernames */}
-          <div className="mt-2">
-            <button onClick={() => setUsernameError(!usernameError)} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-              {usernameError ? 'Hide Usernames' : 'Show Usernames'}
-            </button>
-            {usernameError && renderSavedUsernames()}
-          </div>
-          {/* Error message if needed */}
-          {(usernameError) && (
-            <p className="text-red-500 text-xs mt-2">
-              Please enter a valid name and handle.
-            </p>
-          )}
-        </div>
-      </div>
+       </div> 
     </aside>
   );
 }

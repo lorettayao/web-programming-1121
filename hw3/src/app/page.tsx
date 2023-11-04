@@ -11,7 +11,8 @@ import { likesTable, tweetsTable, usersTable } from "@/db/schema";
 // import { Label } from "@/components/ui/label";
 // import { cn, validateHandle, validateUsername } from "@/lib/utils";
 // import { useSearchParams } from "next/navigation";
-// import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 
 type HomePageProps = {
   searchParams: {
@@ -20,17 +21,6 @@ type HomePageProps = {
   };
 };
 
-// const searchParams = useSearchParams();
-// const usernameInputRef = useRef<HTMLInputElement>(null);
-// const [usernameError, setUsernameError] = useState(false);
-// Since this is a server component, we can do some server side processing
-// in the react component. This may seem crazy at first, but it's actually
-// a very powerful feature. It allows us to do the data fetching and rendering
-// the page in the same place. It may seem weird to run react code on the server,
-// but remember, react is not just for the browser, react-dom is. React is just
-// the shadow dom and state update logic. We can use react to render anything,
-// any where. There are already libraries that use react to render to the terminal,
-// email, PDFs, native mobile apps, 3D objects and even videos.
 export default async function Home({
   searchParams: { username, handle },
 }: HomePageProps) {
@@ -57,29 +47,7 @@ export default async function Home({
       .execute();
   }
 
-  // This is a good example of using subqueries, joins, and with statements
-  // to get the data we need in a single query. This is a more complicated
-  // query, go to src/app/tweet/[tweet_id]/page.tsx to see a simpler example.
-  //
-  // This is much more efficient than running separate queries for tweets,
-  // likes, and liked, and then combining them in javascript. Not only is
-  // the data processing done in the database, but we also only need to
-  // make a single request to the database instead of three.
-
-  // WITH clause is used to create a temporary table that can be used in the
-  // main query. This is useful for creating subqueries that are used multiple
-  // times in the main query. Or just to make the main query more readable.
-  // read more about it here: https://orm.drizzle.team/docs/select#with-clause
-  // If you're familiar with CTEs in SQL, watch this video:
-  // https://planetscale.com/learn/courses/mysql-for-developers/queries/common-table-expressions-ctes
-  //
-  // This subquery generates the following SQL:
-  // WITH likes_count AS (
-  //  SELECT
-  //   tweet_id,
-  //   count(*) AS likes
-  //   FROM likes
-  //   GROUP BY tweet_id
+  
   // )
   const likesSubquery = db.$with("likes_count").as(
     db
@@ -96,14 +64,7 @@ export default async function Home({
       .groupBy(likesTable.tweetId),
   );
 
-  // This subquery generates the following SQL:
-  // WITH liked AS (
-  //  SELECT
-  //   tweet_id,
-  //   1 AS liked
-  //   FROM likes
-  //   WHERE user_handle = {handle}
-  //  )
+ 
   const likedSubquery = db.$with("liked").as(
     db
       .select({
