@@ -27,7 +27,7 @@ export default function NameDialog() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const usernameInputRef = useRef<HTMLInputElement>(null);
-  
+  const handleInputRef = useRef<HTMLInputElement>(null);
   const [usernameError, setUsernameError] = useState(false);
   const [handleError, setHandleError] = useState(false);
 
@@ -35,9 +35,9 @@ export default function NameDialog() {
   // only show the dialog if the username or handle is invalid
   useEffect(() => {
     const username = searchParams.get("username");
-    
+    const handle = searchParams.get("handle");
     // if any of the username or handle is not valid, open the dialog
-    setDialogOpen(!validateUsername(username));
+    setDialogOpen(!validateUsername(username) || !validateHandle(handle));
   }, [searchParams]);
 
   // handleSave modifies the query params to set the username and handle
@@ -45,13 +45,14 @@ export default function NameDialog() {
   // and insert the user into the database.
   const handleSave = () => {
     const username = usernameInputRef.current?.value;
-    
+    const handle = handleInputRef.current?.value;
 
     const newUsernameError = !validateUsername(username);
     setUsernameError(newUsernameError);
-    
+    const newHandleError = !validateHandle(handle);
+    setHandleError(newHandleError);
 
-    if (newUsernameError ) {
+    if (newUsernameError || newHandleError) {
       return false;
     }
 
@@ -66,7 +67,7 @@ export default function NameDialog() {
     // invalid, so we can safely use the values here and assert that they are
     // not null or undefined.
     params.set("username", username!);
-    
+    params.set("handle", handle!);
     router.push(`${pathname}?${params.toString()}`);
     setDialogOpen(false);
 
@@ -92,37 +93,59 @@ export default function NameDialog() {
   };
 
   return (
-    // <div className="fixed top-0 left-0 right-0 bg-white shadow-md p-4 z-50">
-    //     <div className="max-w-3xl mx-auto">
-    //       <div className="grid grid-cols-4 gap-4 items-center">
-    //         <span>Name:</span>
-    //         <Input
-    //           ref={usernameInputRef}
-    //           className="col-span-3"
-    //           defaultValue={"username" || ''}
-    //           placeholder="Your Name"
-    //         />
-    //         <span>Handle:</span>
-    //         <div className="flex col-span-3 items-center">
-    //           <span className="mr-2">@</span>
-    //           <Input
-    //             ref={handleInputRef}
-    //             className="flex-1"
-    //             defaultValue={"handle" || ''}
-    //             placeholder="Your Handle"
-    //           />
-    //         </div>
-    //       </div>
-    //       <div className="text-right mt-2">
-    //         {/* <Button onClick={updateParams}>Update</Button> */}
-    //       </div>
-    //       {(usernameError || handleError) && (
-    //         <p className="text-red-500 text-xs mt-2">
-    //           Please enter a valid name and handle.
-    //         </p>
-    //       )}
-    //     </div>
-    //   </div>
-    <div></div>
+    <Dialog open={dialogOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Welcome to Twitter!</DialogTitle>
+          <DialogDescription>
+            Tell us your name to start tweeting.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input
+              placeholder="Web Programming"
+              defaultValue={searchParams.get("username") ?? ""}
+              className={cn(usernameError && "border-red-500", "col-span-3")}
+              ref={usernameInputRef}
+            />
+            {usernameError && (
+              <p className="col-span-3 col-start-2 text-xs text-red-500">
+                Invalid username, use only{" "}
+                <span className="font-mono">[a-z0-9 ]</span>, must be between 1
+                and 50 characters long.
+              </p>
+            )}
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Handle
+            </Label>
+            <div className="col-span-3 flex items-center gap-2">
+              <span>@</span>
+              <Input
+                placeholder="web.prog"
+                defaultValue={searchParams.get("handle") ?? ""}
+                className={cn(handleError && "border-red-500")}
+                ref={handleInputRef}
+              />
+            </div>
+            {handleError && (
+              <p className="col-span-3 col-start-2 text-xs text-red-500">
+                Invalid handle, use only{" "}
+                <span className="font-mono">[a-z0-9\._-]</span>, must be between
+                1 and 25 characters long.
+              </p>
+            )}
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleSave}>start</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
