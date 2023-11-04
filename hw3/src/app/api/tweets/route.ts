@@ -72,3 +72,37 @@ export async function POST(request: NextRequest) {
 
   return new NextResponse("OK", { status: 200 });
 }
+
+// Define a zod schema for the GET search query
+const getSearchSchema = z.object({
+  term: z.string().min(1).max(280),
+});
+
+// Type for the GET search query
+type GetSearchQuery = z.infer<typeof getSearchSchema>;
+
+export async function GET(request: NextRequest) {
+  const url = request.nextUrl;
+  const term = url.searchParams.get('term');
+
+  // Validate the search term
+  try {
+    getSearchSchema.parse({ term });
+  } catch (error) {
+    return NextResponse.json({ error: "Invalid search term" }, { status: 400 });
+  }
+
+  try {
+    // Replace 'content' with the column name you want to search in
+    const searchColumn = 'content'; // or whichever column you're searching
+    const searchResults = await db
+      .select()
+      .from(tweetsTable)
+      // .where(searchColumn, 'ILIKE', `%${term}%`) // Use ILIKE for case-insensitive search
+      .execute();
+
+    return NextResponse.json(searchResults);
+  } catch (error) {
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+  }
+}

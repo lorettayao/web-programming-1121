@@ -10,6 +10,9 @@ import { Separator } from "@/components/ui/separator";
 import useTweet from "@/hooks/useTweet";
 import useUserInfo from "@/hooks/useUserInfo";
 import { cn } from "@/lib/utils";
+import SearchBar from './SearchBar';
+import ProfileButton from "./ProfileButton";
+import NameDialog from "./NameDialog";
 
 type TweetData = {
   text:string;
@@ -130,7 +133,7 @@ export default function TweetInput() {
         />
       )}
 
-      <UserAvatar className="h-12 w-12" />
+      
       <div className="flex w-full flex-col px-2">
         {/* <button className="flex w-fit items-center rounded-full border-[1px] border-gray-300 px-2 text-sm font-bold text-brand">
           Everyone
@@ -144,6 +147,9 @@ export default function TweetInput() {
           />
         </div> */}
         <Separator />
+        <ProfileButton />
+        <NameDialog />
+        <SearchBar />
         <div className="flex justify-end">
           <button
             className={cn(

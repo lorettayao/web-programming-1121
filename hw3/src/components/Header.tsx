@@ -20,6 +20,7 @@ import larry from "@/assets/larry.png";
 import { cn } from "@/lib/utils";
 import ProfileButton from "./ProfileButton";
 
+
 export default function Header() {
   const [usernames, setUsernames] = useState<string[]>([]); // Stores the list of usernames
   const [currentUsername, setCurrentUsername] = useState(''); // Stores the currently selected username
@@ -50,7 +51,8 @@ export default function Header() {
     <aside className="flex h-screen flex-col justify-between px-6 py-6">
       {/* ... other links and buttons */}
       <div>
-        <ProfileButton />
+        {/* <ProfileButton /> */}
+        
         {/* Name input section */}
        </div> 
     </aside>
@@ -82,6 +84,7 @@ function HeaderButton({ Icon, text, active }: HeaderButtonProps) {
             strokeWidth={active ? 3 : 2}
           />
         </div>
+        
         <span
           // the `cn` helper function basically concatenate your tailwind classes in a safe way
           // on the surface, it will remove any falsy values from the array, it also remove any redundant classes

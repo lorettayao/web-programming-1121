@@ -65,7 +65,7 @@ export default function LikeButton({
         liked && "bg-brand/10",
       )}
     >
-      {likesCount > 0 ? `${likesCount}+ joined` : 'Join'}
+      {likesCount > 0 ? `${likesCount}人參加` : '參加'}
     </div>
   </button>
   );

@@ -16,7 +16,7 @@ export default function ProfileButton() {
 
   return (
     <button
-      className="flex items-center gap-2 rounded-full p-3 text-start transition-colors duration-300 hover:bg-gray-200"
+      className="flex items-center gap-2 rounded-full p-3 text-start transition-colors duration-300 "
       // go to home page without any query params to allow the user to change their username and handle
       // see src/components/NameDialog.tsx for more details
       onClick={() => router.push("/")}
@@ -25,9 +25,9 @@ export default function ProfileButton() {
       <UserAvatar />
       <div className="w-40 max-lg:hidden">
         <p className="text-sm font-bold">{username ?? "..."}</p>
-        <p className="text-sm text-gray-500">{`@${handle}`}</p>
+        {/* <p className="text-sm text-gray-500">{`@${handle}`}</p> */}
       </div>
-      <MoreHorizontal size={24} className="max-lg:hidden" />
+      {/* <MoreHorizontal size={24} className="max-lg:hidden" /> */}
     </button>
   );
 }
