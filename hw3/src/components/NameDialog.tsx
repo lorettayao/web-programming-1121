@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn, validateHandle, validateUsername } from "@/lib/utils";
 import useUserInfo from "@/hooks/useUserInfo";
+import useName from "@/hooks/useName";
 
 export default function NameDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -23,30 +24,56 @@ export default function NameDialog() {
   const [selectedUsername, setSelectedUsername] = useState('');
   const { username } = useUserInfo();
 
-  // useEffect(() => {
-  //   // You should load your usernames here, for the example I'll use a static array
-  //   const usernamesList = ['alice', 'bob', 'charlie']; // Replace with actual data fetching
-  //   setUsernames(usernamesList);
-  // }, []);
+  
+
+  const useNames = () => {
+  const [names, setNames] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    // Define an asynchronous function to fetch the data
-    const fetchUsernames = async () => {
-      try {
-        const response = await fetch('/api/users'); // Your endpoint to fetch usernames
+    setLoading(true);
+    fetch('/api/usernames') // Replace with your actual API endpoint
+      .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-        const data = await response.json();
-        setUsernames(data.usernames); // Assuming the response has a `usernames` field
-      } catch (error) {
-        console.error('Failed to fetch usernames:', error);
-        // Handle errors here, e.g., set an error state, show a notification, etc.
-      }
-    };
-
-    // Call the fetch function
-    fetchUsernames();
+        return response.json();
+      })
+      .then((data) => {
+        setNames(data.usernames); // Make sure the API returns an object with a `usernames` property
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
   }, []);
+
+  return { names, loading, error };
+};
+
+// In your component:
+const { names, loading, error } = useNames();
+
+// ...
+
+    useEffect(() => {
+      if (loading) {
+        // Optionally handle loading state
+      }
+
+      if (error) {
+        console.error('Failed to fetch usernames:)))', error);
+        // Optionally handle error state
+      }
+      
+      // This assumes the `names` array will update once the data is fetched
+      setUsernames(names);
+    }, [loading, error, names]);
+
+    // ...
+
 
     const handleUsernameSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const newUsername = e.target.value;
