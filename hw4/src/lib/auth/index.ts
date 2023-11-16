@@ -14,25 +14,7 @@ export const {
 } = NextAuth({
   providers: [GitHub, CredentialsProvider],
   callbacks: {
-    // async session({ session, token }) {
-      
-
-    //   const [user] = await db
-    //     .select({
-    //       id: usersTable.displayId,
-    //     })
-    //     .from(usersTable)
     
-    //     .execute();
-
-    //   return {
-    //     ...session,
-    //     user: {
-    //       ...session.user,
-    //       id: user.id,
-    //     },
-    //   };
-    // },
     async session({ session }) {
       const [user] = await db
         .select({
