@@ -1,12 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { and, eq } from "drizzle-orm";
-
+import Pusher from "pusher";
 import { db } from "@/db";
 
 import { documentsTable, usersToDocumentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { updateDocSchema } from "@/validators/updateDocument";
+import { privateEnv } from "@/lib/env/private";
+import { publicEnv } from "@/lib/env/public";
 
 // GET /api/documents/:documentId
 export async function GET(
@@ -112,7 +114,23 @@ export async function PUT(
         .set(validatedReqBody)
         .where(eq(documentsTable.displayId, params.documentId))
         .returning();
-  
+      // Trigger pusher event
+      const pusher = new Pusher({
+        appId: privateEnv.PUSHER_ID,
+        key: publicEnv.NEXT_PUBLIC_PUSHER_KEY,
+        secret: privateEnv.PUSHER_SECRET,
+        cluster: publicEnv.NEXT_PUBLIC_PUSHER_CLUSTER,
+        useTLS: true,
+      });
+
+      await pusher.trigger(`private-${updatedDoc.displayId}`, "doc:update", {
+        senderId: userId,
+        document: {
+          id: updatedDoc.displayId,
+          title: updatedDoc.title,
+          content: updatedDoc.content,
+        },
+      });
       return NextResponse.json(
         {
           id: updatedDoc.displayId,
