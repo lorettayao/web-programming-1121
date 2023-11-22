@@ -1,19 +1,18 @@
-import ShareDialog from "./_components/ShareDialog";
+import { MessagesProvider } from "@/context/message";
+import React from "react";
 
 type Props = {
   children: React.ReactNode;
-  params: { docId: string };
 };
 
-function DocEditorLayout({ children, params }: Props) {
+const layout = ({ children }: Props) => {
   return (
-    <div className="w-full">
-      <div className="fixed right-2 top-1 z-50">
-        <ShareDialog docId={params.docId} />
+    <div className="flex flex-col fixed top-0 h-screen w-full overflow-hidden items-center ">
+      <div className="xl:w-1/3 md:w-1/2 sm:w-2/3 w-full h-screen">
+        <MessagesProvider>{children}</MessagesProvider>
       </div>
-      {children}
     </div>
   );
-}
+};
 
-export default DocEditorLayout;
+export default layout;

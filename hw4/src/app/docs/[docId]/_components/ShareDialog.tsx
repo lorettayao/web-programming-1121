@@ -62,6 +62,7 @@ async function ShareDialog({ docId }: Props) {
               <RxAvatar size={30} />
               <div className="flex grow flex-col ">
                 <h2 className="text-sm font-semibold">{author.username}</h2>
+
                 <p className="text-xs text-gray-600">{author.email}</p>
               </div>
             </form>
