@@ -1,9 +1,9 @@
 "use client";
+
 import { useDocument } from "@/hooks/useDocument";
 
-
 function DocPage() {
-    const { title, setTitle, content, setContent } = useDocument();
+  const { title, setTitle, content, setContent } = useDocument();
   return (
     <div className="w-full">
       <nav className="sticky top-0 flex w-full justify-between p-2 shadow-sm">

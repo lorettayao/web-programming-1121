@@ -11,7 +11,7 @@ export async function getDocumentAuthors(docId: string) {
         columns: {
           displayId: true,
           username: true,
-          
+          email: true,
         },
       },
     },
@@ -23,7 +23,7 @@ export async function getDocumentAuthors(docId: string) {
     return {
       id: author.displayId,
       username: author.username,
-      
+      email: author.email,
     };
   });
 
@@ -37,7 +37,7 @@ export const addDocumentAuthor = async (docId: string, email: string) => {
       displayId: usersTable.displayId,
     })
     .from(usersTable)
-    // .where(eq(usersTable.email, email));
+    .where(eq(usersTable.email, email));
   if (!user) {
     return false;
   }

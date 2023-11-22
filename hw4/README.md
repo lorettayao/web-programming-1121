@@ -1,3 +1,42 @@
+# Run the project
+
+1. Install dependencies
+   ```bash
+   yarn
+   ```
+2. Get Pusher credentials
+   Please refer to the [Pusher Setup](#pusher-setup) section for more details.
+
+3. Get Github OAuth credentials
+   Please refer to the [NextAuth Setup](#nextauth-setup) section for more details.
+
+4. Create `.env.local` file in the project root and add the following content:
+
+   ```text
+   PUSHER_ID=
+   NEXT_PUBLIC_PUSHER_KEY=
+   PUSHER_SECRET=
+   NEXT_PUBLIC_PUSHER_CLUSTER=
+
+   AUTH_SECRET=<this can be any random string>
+   AUTH_GITHUB_ID=
+   AUTH_GITHUB_SECRET=
+   ```
+
+5. Start the database
+   ```bash
+   docker compose up -d
+   ```
+6. Run migrations
+   ```bash
+   yarn migrate
+   ```
+7. Start the development server
+   ```bash
+   yarn dev
+   ```
+8. Open http://localhost:3000 in your browser
+
 # Setup Guide
 
 ## Prettier and ESLint
@@ -121,6 +160,8 @@
     }
     ```
 
+    Remember to run `yarn migrate` after you make changes to the database schema, namely the `./src/db/schema.ts` file.
+
 11. Add `pg-data` to `.gitignore`
     ```text
     ...
@@ -160,8 +201,7 @@
 2.  Create a pusher account at https://pusher.com/
 3.  Create a new app
 
-    - Click `Manage` on the `Channel` tab
-    - Click `Create app`
+    - Click `Get Started` or `Manage/Create app`on the `Channel` tab
     - Enter the app name
     - Select a cluster. Pick the one closest to you, i.e. `ap3(Asia Pacific (Tokyo))`
     - Click `Create app`
@@ -202,7 +242,7 @@ We use the latest version (v5) of NextAuth, which is still in beta. So there are
    - Go to `Settings` tab of your Github account
    - Click `Developer settings` on the left sidebar
    - Click `OAuth Apps` on the left sidebar
-   - Click `New OAuth App`
+   - Click `New OAuth App` or `Registr a new application`
    - Enter the following information:
      - `Application name`: `Notion Clone` (or any name you like)
      - `Homepage URL`: `http://localhost:3000`
@@ -214,6 +254,8 @@ We use the latest version (v5) of NextAuth, which is still in beta. So there are
      AUTH_GITHUB_ID=<Client ID>
      AUTH_GITHUB_SECRET=<Client Secret>
      ```
+
+     Before copying the Clinet Secret, you may need to click on `Generate a new client secret` first.
 
      Note that in NextAuth v5, the prefix `AUTH_` is required for the env variables.
 

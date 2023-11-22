@@ -1,6 +1,5 @@
 import { BiError } from "react-icons/bi";
 
-
 function DocsPage() {
   return (
     <div className="flex h-[90vh] w-full items-center justify-center">
@@ -9,7 +8,7 @@ function DocsPage() {
         <p className="text-sm font-semibold text-slate-700">
           Please select a document to edit
         </p>
-        </div>
+      </div>
     </div>
   );
 }

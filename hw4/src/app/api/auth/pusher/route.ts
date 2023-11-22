@@ -10,7 +10,7 @@ import { pusherServer } from "@/lib/pusher/server";
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    if ( !session?.user?.id) {
+    if (!session?.user?.email || !session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     const userData = {
-      user_id: session.user.username,
+      user_id: session.user.email,
     };
 
     const authResponse = pusherServer.authorizeChannel(
