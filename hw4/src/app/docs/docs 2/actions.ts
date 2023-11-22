@@ -11,8 +11,8 @@ export const createDocument = async (userId: string) => {
     const [newDoc] = await tx
       .insert(documentsTable)
       .values({
-        title: "New Document",
-        content: "This is a new document",
+        title: "New Chat",
+        content: "This is a new chat",
       })
       .returning();
     await tx.insert(usersToDocumentsTable).values({
