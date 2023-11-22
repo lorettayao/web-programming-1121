@@ -28,7 +28,7 @@ async function Navbar() {
           <div className="flex items-center gap-2">
             <RxAvatar />
             <h1 className="text-sm font-semibold">
-              {session?.user?.username ?? "User"}
+              {session?.user?.email ?? "User"}
             </h1>
           </div>
           <Link href={`/auth/signout`}>

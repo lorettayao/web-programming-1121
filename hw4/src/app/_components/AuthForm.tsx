@@ -15,9 +15,9 @@ import AuthInput from "./AuthInput";
 
 function AuthForm() {
   const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>("123");
+  const [password, setPassword] = useState<string>("123");
+  const [confirmPassword, setConfirmPassword] = useState<string>("123");
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,20 +38,13 @@ function AuthForm() {
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <AuthInput
-            label="Email"
+            label="Username"
             type="email"
             value={email}
             setValue={setEmail}
           />
-          {isSignUp && (
-            <AuthInput
-              label="Username"
-              type="text"
-              value={username}
-              setValue={setUsername}
-            />
-          )}
-          <AuthInput
+          
+          {/* <AuthInput
             label="Password"
             type="password"
             value={password}
@@ -64,7 +57,7 @@ function AuthForm() {
               value={confirmPassword}
               setValue={setConfirmPassword}
             />
-          )}
+          )} */}
           <div className="text-sm text-gray-500">
             {isSignUp ? (
               <span>
