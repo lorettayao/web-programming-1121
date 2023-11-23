@@ -52,7 +52,7 @@ export default CredentialsProvider({
         return null;
       }
       // TODO: 2.1 Hash password with bcrypt
-      // const hashedPassword = password; // change this line
+     
       const hashedPassword = await bcrypt.hash(password, 8);
       // TODO: 2.1 end
 
@@ -83,7 +83,7 @@ export default CredentialsProvider({
       return null;
     }
     // TODO: 2.2 Compare password with bcrypt
-    // 
+    
     const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
     // TODO: 2.2 end
 

@@ -28,7 +28,7 @@ function AuthForm() {
       email,
       name,
       password,
-      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/docs`,
+      callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/projects`,
     });
     // TODO: 3. end
   };
