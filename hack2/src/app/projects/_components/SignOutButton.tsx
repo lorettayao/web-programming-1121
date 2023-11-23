@@ -11,7 +11,8 @@ export default function SignOutButton() {
     await signOut(); // Call the signOut function from next-auth/react to sign out the user
   };
   return (
-    <Button variant={"outline"} onClick={handleSignOut}>
+  
+    <Button data-testid="sign-out-button" variant={"outline"} onClick={handleSignOut}>
       Sign Out
     </Button>
   );

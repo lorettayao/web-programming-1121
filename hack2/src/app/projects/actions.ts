@@ -65,7 +65,7 @@ export async function createProject(
   });
 
   // TODO: 6. Update the navbar for the user's projects
-
+  return newProject;
   // TODO: 6. end
 
   return newProject;
