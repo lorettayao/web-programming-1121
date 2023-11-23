@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
+import { env } from "process";
 
 function AuthForm() {
   const [email, setEmail] = useState<string>("");
@@ -26,7 +27,7 @@ function AuthForm() {
     // hint: notion clone
     signIn("credentials", {
       email,
-      name,
+      // name,
       password,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/projects`,
     });
