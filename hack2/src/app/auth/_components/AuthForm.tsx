@@ -27,7 +27,7 @@ function AuthForm() {
     // hint: notion clone
     signIn("credentials", {
       email,
-      // name,
+      name,
       password,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/projects`,
     });
