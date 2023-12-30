@@ -333,7 +333,7 @@ INSERT INTO global_dictionary (id, word, definition) VALUES
   (299, 'aromatic', '芳香'), 
   (300, 'arraign', '提拔');
 ```
-
+<!--一定要load這串字到後段DB -->
 #### Get Github OAuth credentials
 
 - Go to `Settings` tab of your Github account
