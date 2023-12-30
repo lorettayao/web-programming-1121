@@ -412,7 +412,7 @@ link: https://youtu.be/9kVBmebtXHU
 3. 各個使用者的歷史總積分排行。
 
 ## Deployed Link
-https://wp-final.vercel.app/
+https://wp-final-9kj65sf2i-lorettas-projects.vercel.app/
 
 ## Reference
 Hack 2 in WP1121
