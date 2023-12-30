@@ -22,8 +22,14 @@ AUTH_GITHUB_SECRET=
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 #### database setup
-in the database adminer->globaldictionary, use SQL command to load the vocabulary
+adminer : localhost:8080
+系統資料庫：postgresql
+伺服器：postgresql
+帳號：postgres
+密碼：postgres
+in the database adminer->global_dictionary, use SQL command to load the vocabulary
 
+load the below string into the SQL input box:
 
 INSERT INTO global_dictionary (id, word, definition) VALUES
   (1, 'abase', '貶低自己;卑躬屈膝'), 
